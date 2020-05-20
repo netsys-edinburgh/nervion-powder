@@ -139,4 +139,4 @@ echo "And this is the dashboard credential: $dashboard_credential"
 date
 
 # Deploy emulator
-sudo kubectl create - f config/deployment.yaml
+sudo kubectl create -f config/deployment.yaml

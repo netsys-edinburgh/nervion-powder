@@ -109,10 +109,9 @@ if params.useVMs:
 else:
     epc_node = request.RawPC('epc')
     epc_node.hardware_type = params.nodeType
-epc_node.disk_image = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU16-64-OAIEPC")
+epc_node.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 epc_node.Site('Site 1')
 epc_iface = epc_node.addInterface('interface-'+str(params.computeNodeCount+1))
-epc_node.addService(pg.Execute(shell="bash", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 
 
 # Link link-m

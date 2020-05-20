@@ -87,7 +87,7 @@ source <(kubectl completion bash)
 sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
-sudo kubectl proxy  --kubeconfig=${KUBEHOME}/admin.conf &
+sudo kubectl proxy  --kubeconfig=${KUBEHOME}/admin.conf -p 8080&
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath

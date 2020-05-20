@@ -52,8 +52,7 @@ pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
 pc.defineParameter("useVMs", "Use virtual machines (true) or raw PCs (false)",
                    portal.ParameterType.BOOLEAN, True)
 pc.defineParameter("nodeType", "Type of node to use", portal.ParameterType.NODETYPE, "d430")
-pc.defineParameter("deployOAI", "Deploy openairinterface-k8s",
-                   portal.ParameterType.BOOLEAN, True)
+
 params = pc.bindParameters()
 
 # Create a Request object to start building the RSpec.
@@ -81,9 +80,6 @@ kube_m.Site('Site 1')
 iface0 = kube_m.addInterface('interface-0')
 
 master_command = "/local/repository/scripts/master.sh"
-
-if params.deployOAI:
-    master_command += " --deploy-oai"
 
 kube_m.addService(pg.Execute(shell="bash", command=master_command))
 

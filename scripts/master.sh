@@ -137,3 +137,6 @@ echo "And this is the dashboard credential: $dashboard_credential"
 
 # to know how much time it takes to instantiate everything.
 date
+
+# Deploy emulator
+sudo kubectl create - f https://raw.githubusercontent.com/j0lama/ran_emulator/master/kubernetes/deployment.yaml?token=AEEWLBL37BIAHKABUTECJA26ZZURO

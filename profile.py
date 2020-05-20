@@ -118,7 +118,7 @@ epclink.addNode(kube_m)
 
 master_command = "/local/repository/scripts/master.sh"
 
-kube_m.addService(pg.Execute(shell="bash", command="/usr/bin/sudo /local/repository/scripts/master.sh"))
+kube_m.addService(rspec.Execute(shell="bash", command="/usr/bin/sudo /local/repository/scripts/master.sh"))
 
 #slave_ifaces = []
 for i in range(1,params.computeNodeCount+1):
@@ -133,7 +133,7 @@ for i in range(1,params.computeNodeCount+1):
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Site 1')
     epclink.addNode(kube_s)
-    kube_s.addService(pg.Execute(shell="bash", command="/usr/bin/sudo /local/repository/scripts/slave.sh"))
+    kube_s.addService(rspec.Execute(shell="bash", command="/usr/bin/sudo /local/repository/scripts/slave.sh"))
 
 epclink.link_multiplexing = True
 epclink.vlan_tagging = True

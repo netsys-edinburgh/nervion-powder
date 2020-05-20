@@ -65,7 +65,7 @@ ssh-keygen -y -f ${HOME}/.ssh/id_rsa > ${HOME}/.ssh/id_rsa.pub
 master_token=''
 while [ -z $master_token ] 
 do
-    master_token=`ssh -o StrictHostKeyChecking=no m "export KUBECONFIG='/local/repository/kube/admin.conf' && kubeadm token list | grep authentication | cut -d' ' -f 1"`;
+    master_token=`ssh -o StrictHostKeyChecking=no master "export KUBECONFIG='/local/repository/kube/admin.conf' && kubeadm token list | grep authentication | cut -d' ' -f 1"`;
     sleep 1;
 done
 sudo kubeadm join master:6443 --token $master_token --discovery-token-unsafe-skip-ca-verification 

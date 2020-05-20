@@ -96,7 +96,7 @@ epclink = request.Link("s1-lan")
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
 epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r EPC"))
+epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
@@ -133,7 +133,7 @@ for i in range(1,params.computeNodeCount+1):
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Site 1')
     epclink.addNode(kube_s)
-#    kube_s.addService(pg.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
+    kube_s.addService(pg.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 
 epclink.link_multiplexing = True
 epclink.vlan_tagging = True

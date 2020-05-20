@@ -1,0 +1,91 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pods-manager
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create"]
+
+# Cluster Role Binder: Authorise the controller to create pods
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pods-manager
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: pods-manager
+  apiGroup: rbac.authorization.k8s.io
+
+
+# Controller deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ran-emulator
+  labels:
+    app: ran-controller
+spec:
+  selector:
+    matchLabels:
+      app: ran-controller
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ran-controller
+    spec:
+      containers:
+      - name: ran-emulator
+        image: j0lama/ran_controller:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: user-interface
+        - containerPort: 1234
+          name: internal-port
+
+
+#######################
+# Controller services #
+#######################
+
+# User interface external service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ran-emulator
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    name: ran-controller
+  selector:
+    app: ran-controller
+  type: LoadBalancer
+
+# Internal controller service
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: internal-controller
+spec:
+  selector:    
+    app: ran-controller
+  type: ClusterIP
+  ports:  
+  - name: internal
+    port: 1234
+    targetPort: 1234
+    protocol: UDP

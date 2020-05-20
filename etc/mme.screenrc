@@ -1,0 +1,3 @@
+log on
+logfile /var/log/oai/mme.log
+logfile flush 1

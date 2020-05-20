@@ -1,0 +1,3 @@
+log on
+logfile /var/log/oai/spgw.log
+logfile flush 1

@@ -97,7 +97,7 @@ epclink = request.Link("s1-lan")
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC('epc')
 epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.Site('EPC_OAI')
+epc.Site("EPC_OAI")
 epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)
 epclink.addNode(epc)

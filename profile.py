@@ -102,7 +102,7 @@ if params.useVMs:
 else:
     epc = request.RawPC('epc')
 epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_epc.sh"))
 connectOAI_DS(epc)
 epclink.addNode(epc)
 

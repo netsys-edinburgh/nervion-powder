@@ -3,7 +3,6 @@
 kube_description= \
 """
 Emulator demo
-
 """
 kube_instruction= \
 """
@@ -45,7 +44,6 @@ def connectOAI_DS(node):
     # Create remote read-write clone dataset object bound to OAI dataset
     bs = request.RemoteBlockstore("ds-%s" % node.name, "/opt/oai")
     bs.dataset = GLOBALS.OAI_DS
-    bs.Site('EPC_OAI')
     bs.rwclone = True
     # Create link from node to OAI dataset rw clone
     node_if = node.addInterface("dsif_%s" % node.name)
@@ -95,21 +93,12 @@ request.addTour(tour)
 epclink = request.Link("s1-lan")
 
 # Add OAI EPC (HSS, MME, SPGW) node.
-epc = request.RawPC('epc')
+epc = request.RawPC("epc")
 epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.Site("EPC_OAI")
 epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
-
-epc_v2 = request.XenVM('epc_v2')
-epc_v2.cores = 4
-epc_v2.ram = 1024 * 8
-epc_v2.routable_control_ip = True
-epc_v2.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
-epc_v2.Site('EPC')
-epclink.addNode(epc_v2)
 
 # Node kube-server
 if params.useVMs:

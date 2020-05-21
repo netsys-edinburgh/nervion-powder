@@ -83,11 +83,12 @@ source <(kubectl completion bash)
 # kubectl get nodes --kubeconfig=${KUBEHOME}/admin.conf -s https://155.98.36.111:6443
 # Install dashboard: https://github.com/kubernetes/dashboard
 # TODO: why are we using this specific release? Would the latest get us anything?
-#sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+echo "Launching Kubernetes Dashboard..."
 sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
-sudo kubectl proxy  --kubeconfig=${KUBEHOME}/admin.conf -p 8080&
+echo "Running proxy at port 8080..."
+sudo kubectl proxy  --kubeconfig=${KUBEHOME}/admin.conf -p 8080 &
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -101,6 +102,7 @@ sudo go get -u github.com/containernetworking/plugins/plugins/ipam/static
 sudo go build -o /opt/cni/bin/static github.com/containernetworking/plugins/plugins/ipam/static
 
 # install helm
+echo "Installing Helm"
 wget https://get.helm.sh/helm-v3.1.0-linux-amd64.tar.gz
 tar xf helm-v3.1.0-linux-amd64.tar.gz
 sudo cp linux-amd64/helm /usr/local/bin/helm
@@ -135,8 +137,9 @@ echo "kubernetes dashboard endpoint: $dashboard_endpoint"
 # dashboard credential
 echo "And this is the dashboard credential: $dashboard_credential"
 
-# to know how much time it takes to instantiate everything.
-date
-
 # Deploy emulator
 sudo kubectl create -f config/deployment.yaml
+
+# to know how much time it takes to instantiate everything.
+echo "Setup DONE!"
+date

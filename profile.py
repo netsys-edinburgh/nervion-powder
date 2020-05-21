@@ -94,12 +94,26 @@ request.addTour(tour)
 epclink = request.Link("s1-lan")
 
 # Add OAI EPC (HSS, MME, SPGW) node.
-epc = request.RawPC("epc")
+if params.useVMs:
+    epc = request.XenVM('epc')
+    epc.cores = 4
+    epc.ram = 1024 * 8
+    epc.routable_control_ip = True
+else:
+    epc = request.RawPC('epc')
 epc.disk_image = GLOBALS.OAI_EPC_IMG
 epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
+
+epc_v2 = request.XenVM('epc_v2')
+epc_v2.cores = 4
+epc_v2.ram = 1024 * 8
+epc_v2.routable_control_ip = True
+epc_v2.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
+epc_v2.Site('EPC')
+epclink.addNode(epc_v2)
 
 # Node kube-server
 if params.useVMs:
@@ -112,7 +126,7 @@ else:
     kube_m.hardware_type = params.nodeType
 # kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-kube_m.Site('Site 1')
+kube_m.Site('RAN')
 epclink.addNode(kube_m)
 #iface0 = kube_m.addInterface('interface-0')
 
@@ -131,7 +145,7 @@ for i in range(1,params.computeNodeCount+1):
         kube_s = request.RawPC('slave'+str(i))
         kube_s.hardware_type = params.nodeType
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    kube_s.Site('Site 1')
+    kube_s.Site('RAN')
     epclink.addNode(kube_s)
     kube_s.addService(rspec.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 

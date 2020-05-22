@@ -1,0 +1,5 @@
+git clone https://github.com/OPENAIRINTERFACE/openair-cn.git
+cd openair-cn
+git checkout 724542d0b59797b010af8c5df15af7f669c1e838
+./build_mme -i
+./build_mme --clean

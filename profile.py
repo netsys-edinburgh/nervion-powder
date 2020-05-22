@@ -44,6 +44,7 @@ def connectOAI_DS(node):
     # Create remote read-write clone dataset object bound to OAI dataset
     bs = request.RemoteBlockstore("ds-%s" % node.name, "/opt/oai")
     bs.dataset = GLOBALS.OAI_DS
+    bs.Site('EPC')
     bs.rwclone = True
     # Create link from node to OAI dataset rw clone
     node_if = node.addInterface("dsif_%s" % node.name)
@@ -95,6 +96,7 @@ epclink = request.Link("s1-lan")
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
 epc.disk_image = GLOBALS.OAI_EPC_IMG
+epc.Site('EPC')
 epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)
 epclink.addNode(epc)

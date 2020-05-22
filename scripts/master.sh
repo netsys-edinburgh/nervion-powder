@@ -138,7 +138,7 @@ echo "kubernetes dashboard endpoint: $dashboard_endpoint"
 echo "And this is the dashboard credential: $dashboard_credential"
 
 # Deploy emulator
-#sudo kubectl create -f config/deployment.yaml
+sudo kubectl create -f config/deployment.yaml
 
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"

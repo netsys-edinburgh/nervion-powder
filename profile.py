@@ -93,18 +93,20 @@ request.addTour(tour)
 
 epclink = request.Link("s1-lan")
 
-# Add OAI EPC (HSS, MME, SPGW) node.
-epc = request.RawPC("epc")
-epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.Site('EPC')
-epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
-connectOAI_DS(epc)
-epclink.addNode(epc)
 
-epc1 = request.XenVM('epc2')
+epc1 = request.XenVM('epc')
 epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-epc1.Site('EPC1')
+epc1.Site('EPC')
 epclink.addNode(epc1)
+
+
+## Add OAI EPC (HSS, MME, SPGW) node.
+#epc = request.RawPC("epc2")
+#epc.disk_image = GLOBALS.OAI_EPC_IMG
+#epc.Site('EPC')
+#epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+#connectOAI_DS(epc)
+#epclink.addNode(epc)
 
 # Node kube-server
 if params.useVMs:

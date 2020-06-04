@@ -101,6 +101,11 @@ epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repositor
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
+epc1 = request.RawPC("epc1")
+epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+epc1.Site('EPC1')
+epclink.addNode(epc1)
+
 # Node kube-server
 if params.useVMs:
     kube_m = request.XenVM('master')

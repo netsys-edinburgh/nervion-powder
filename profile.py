@@ -112,7 +112,7 @@ else:
     kube_m.hardware_type = params.nodeType
 # kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-kube_m.Site('RAN')
+kube_m.Site('Nervion')
 epclink.addNode(kube_m)
 #iface0 = kube_m.addInterface('interface-0')
 
@@ -131,7 +131,7 @@ for i in range(1,params.computeNodeCount+1):
         kube_s = request.RawPC('slave'+str(i))
         kube_s.hardware_type = params.nodeType
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    kube_s.Site('RAN')
+    kube_s.Site('Nervion')
     epclink.addNode(kube_s)
     kube_s.addService(rspec.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 

@@ -95,7 +95,7 @@ epclink = request.Link("s1-lan")
 
 
 epc1 = request.XenVM('epc')
-epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 epc1.Site('EPC')
 epclink.addNode(epc1)
 

@@ -101,7 +101,7 @@ epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repositor
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
-epc1 = request.XenVM('master')
+epc1 = request.XenVM('epc2')
 epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 epc1.Site('EPC1')
 epclink.addNode(epc1)

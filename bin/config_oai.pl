@@ -537,9 +537,6 @@ sub provisionUEs($) {
     my $ipv6 = "0:0:0:0:0:0:0:$pgw_id"; # XXX: completely bogus.
     $dbh->do("INSERT INTO pgw VALUES ($pgw_id, '$ipaddrs{S1U_SGW}', '$ipv6')");
 
-    my $pgw_id_ = get_max_id($dbh, "pgw") + 1;
-    $dbh->do("INSERT INTO pgw VALUES ($pgw_id_, '10.0.0.2', '0')");
-
     # Grab largest ID number from `pdn` table.
     my $pdn_id = get_max_id($dbh, "pdn");
 

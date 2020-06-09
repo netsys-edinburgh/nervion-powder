@@ -114,7 +114,7 @@ multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 multiplexer.Site('Multiplexer')
-kube_m.addService(rspec.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
+multiplexer.addService(rspec.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
 epclink.addNode(multiplexer)
 
 # Node kube-server

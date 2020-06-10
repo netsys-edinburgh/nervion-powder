@@ -36,6 +36,7 @@ class GLOBALS(object):
     OAI_EPC_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU16-64-OAIEPC")
     OAI_ENB_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:OAI-Real-Hardware.enb1")
     OAI_SIM_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU14-64-OAI")
+    OAI_SRS_EPC = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:srsEPC-OAICN")
     OAI_CONF_SCRIPT = "/usr/bin/sudo /local/repository/bin/config_oai.pl"
     NUC_HWTYPE = "nuc5300"
     UE_HWTYPE = "nexus5"
@@ -102,7 +103,7 @@ epclink = request.Link("s1-lan")
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
-epc.disk_image = GLOBALS.OAI_EPC_IMG
+epc.disk_image = GLOBALS.OAI_SRS_EPC
 epc.Site('EPC')
 epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 connectOAI_DS(epc)

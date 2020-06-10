@@ -68,7 +68,7 @@ sim_hardware_types = ['d430','d740']
 
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
-pc.defineParameter("useVMs", "Use virtual machines (true) or raw PCs (false)",
+pc.defineParameter("EPC", "OpenAirInterface (true) or srsLTE (false)",
                    portal.ParameterType.BOOLEAN, True)
 pc.defineParameter("nodeType", "Type of node to use", portal.ParameterType.NODETYPE, "d430")
 
@@ -103,9 +103,13 @@ epclink = request.Link("s1-lan")
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
-epc.disk_image = GLOBALS.OAI_SRS_EPC
+epc.disk_image = GLOBALS.OAI_EPC_IMG
 epc.Site('EPC')
-epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+
+# TODO
+if params.EPC:
+    epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+
 connectOAI_DS(epc)
 epclink.addNode(epc)
 
@@ -119,14 +123,10 @@ multiplexer.addService(rspec.Execute(shell="bash", command="python /local/reposi
 epclink.addNode(multiplexer)
 
 # Node kube-server
-if params.useVMs:
-    kube_m = request.XenVM('master')
-    kube_m.cores = 4
-    kube_m.ram = 1024 * 8
-    kube_m.routable_control_ip = True
-else:
-    kube_m = request.RawPC('master')
-    kube_m.hardware_type = params.nodeType
+kube_m = request.XenVM('master')
+kube_m.cores = 4
+kube_m.ram = 1024 * 8
+kube_m.routable_control_ip = True
 # kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')
@@ -139,14 +139,10 @@ kube_m.addService(rspec.Execute(shell="bash", command="/local/repository/scripts
 
 #slave_ifaces = []
 for i in range(1,params.computeNodeCount+1):
-    if params.useVMs:
-        kube_s = request.XenVM('slave'+str(i))
-        kube_s.cores = 4
-        kube_s.ram = 1024 * 8
-        kube_s.routable_control_ip = True
-    else:
-        kube_s = request.RawPC('slave'+str(i))
-        kube_s.hardware_type = params.nodeType
+    kube_s = request.XenVM('slave'+str(i))
+    kube_s.cores = 4
+    kube_s.ram = 1024 * 8
+    kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')
     epclink.addNode(kube_s)

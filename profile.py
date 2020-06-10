@@ -110,7 +110,7 @@ epc.Site('EPC')
 if params.EPC:
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
 else:
-    epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/scripts/srslte.sh"))
+    epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
 
 connectOAI_DS(epc)
 epclink.addNode(epc)

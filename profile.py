@@ -72,8 +72,6 @@ rspec_ = rspec.Request()
 # Profile parameters.
 #
 
-sim_hardware_types = ['d430','d740']
-
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
 pc.defineParameter("EPC", "OpenAirInterface, srsLTE or MobileStream",
@@ -109,21 +107,21 @@ net_d = rspec_.EPClan(PN.EPCLANS.NET_D, vmlan = 0)
 netmask="255.255.255.0"
 
 
-# Add OAI EPC (HSS, MME, SPGW) node.
-epc = rspec_.RawPC("epc")
 
-# TODO
 if params.EPC == "OAI":
+    epc = rspec_.RawPC("epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
     connectOAI_DS(epc)
 elif params.EPC == "srsLTE":
+    epc = rspec_.RawPC("epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
     connectOAI_DS(epc)
 elif params.EPC == "MobileStream":
+    epc = rspec_.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
     epc.hardware_type = "d430"
     epc.Site('EPC')
@@ -138,7 +136,7 @@ multiplexer.cores = 4
 multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-multiplexer.Site('Multiplexer')
+multiplexer.Site('Nervion')
 multiplexer.addService(rspec.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
 #epclink.addNode(multiplexer)
 cintf = net_d.addMember(multiplexer)
@@ -150,7 +148,6 @@ kube_m = rspec_.XenVM('master')
 kube_m.cores = 4
 kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
-# kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')
 #epclink.addNode(kube_m)

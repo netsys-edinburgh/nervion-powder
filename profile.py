@@ -97,14 +97,10 @@ tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
 rspec.addTour(tour)
 
 
-#epclink = request.Link("s1-lan")
-usevms = 0
-net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
-
-
 netmask="255.255.255.0"
 
 
+ms = False
 
 if params.EPC == "OAI":
     epc = rspec.RawPC("epc")
@@ -122,12 +118,19 @@ elif params.EPC == "MobileStream":
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
     epc.hardware_type = "d430"
+    ms = True
     #epc.Site('EPC')
 
-#epclink.addNode(epc)
-cintf = net_d.addMember(epc)
-caddr = PG.IPv4Address("192.168.4.80", netmask)
-cintf.addAddress(caddr)
+epclink = request.Link("s1-lan")
+usevms = 0
+net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
+
+if ms == False:
+    epclink.addNode(epc)
+else:
+    cintf = net_d.addMember(epc)
+    caddr = PG.IPv4Address("192.168.4.80", netmask)
+    cintf.addAddress(caddr)
 
 multiplexer = rspec.XenVM('multiplexer')
 multiplexer.cores = 4
@@ -136,10 +139,12 @@ multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 #multiplexer.Site('Nervion')
 multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
-#epclink.addNode(multiplexer)
-cintf = net_d.addMember(multiplexer)
-caddr = PG.IPv4Address("192.168.4.81", netmask)
-cintf.addAddress(caddr)
+if ms == False:
+    epclink.addNode(multiplexer)
+else:
+    cintf = net_d.addMember(multiplexer)
+    caddr = PG.IPv4Address("192.168.4.81", netmask)
+    cintf.addAddress(caddr)
 
 # Node kube-server
 kube_m = rspec.XenVM('master')
@@ -148,10 +153,12 @@ kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 #kube_m.Site('Nervion')
-#epclink.addNode(kube_m)
-cintf = net_d.addMember(kube_m)
-caddr = PG.IPv4Address("192.168.4.82", netmask)
-cintf.addAddress(caddr)
+if ms == False:
+    epclink.addNode(kube_m)
+else:
+    cintf = net_d.addMember(kube_m)
+    caddr = PG.IPv4Address("192.168.4.82", netmask)
+    cintf.addAddress(caddr)
 
 master_command = "/local/repository/scripts/master.sh"
 
@@ -165,19 +172,22 @@ for i in range(1,params.computeNodeCount+1):
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     #kube_s.Site('Nervion')
-    #epclink.addNode(kube_s)
-    cintf = net_d.addMember(kube_s)
-    caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
-    cintf.addAddress(caddr)
+    if ms == False:
+        epclink.addNode(kube_s)
+    else:
+        cintf = net_d.addMember(kube_s)
+        caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
+        cintf.addAddress(caddr)
     kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 
-#epclink.link_multiplexing = True
-#epclink.vlan_tagging = True
-#epclink.best_effort = True
-
-net_d.link_multiplexing = True
-net_d.vlan_tagging = True
-net_d.best_effort = True
+if ms == False:
+    epclink.link_multiplexing = True
+    epclink.vlan_tagging = True
+    epclink.best_effort = True
+else:
+    net_d.link_multiplexing = True
+    net_d.vlan_tagging = True
+    net_d.best_effort = True
 
 #
 # Print and go!

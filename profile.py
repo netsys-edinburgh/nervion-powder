@@ -99,7 +99,7 @@ request = pc.makeRequestRSpec()
 tour = IG.Tour()
 tour.Description(IG.Tour.TEXT,kube_description)
 tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
-request.addTour(tour)
+rspec_.addTour(tour)
 
 
 #epclink = request.Link("s1-lan")
@@ -110,7 +110,7 @@ netmask="255.255.255.0"
 
 
 # Add OAI EPC (HSS, MME, SPGW) node.
-epc = request.RawPC("epc")
+epc = rspec_.RawPC("epc")
 
 # TODO
 if params.EPC == "OAI":
@@ -132,7 +132,7 @@ cintf = net_d.addMember(epc)
 caddr = rspec.IPv4Address("192.168.4.80", netmask)
 cintf.addAddress(caddr)
 
-multiplexer = request.XenVM('multiplexer')
+multiplexer = rspec_.XenVM('multiplexer')
 multiplexer.cores = 4
 multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
@@ -145,7 +145,7 @@ caddr = rspec.IPv4Address("192.168.4.81", netmask)
 cintf.addAddress(caddr)
 
 # Node kube-server
-kube_m = request.XenVM('master')
+kube_m = rspec_.XenVM('master')
 kube_m.cores = 4
 kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
@@ -163,7 +163,7 @@ kube_m.addService(rspec.Execute(shell="bash", command="/local/repository/scripts
 
 #slave_ifaces = []
 for i in range(1,params.computeNodeCount+1):
-    kube_s = request.XenVM('slave'+str(i))
+    kube_s = rspec_.XenVM('slave'+str(i))
     kube_s.cores = 4
     kube_s.ram = 1024 * 8
     kube_s.routable_control_ip = True
@@ -182,4 +182,4 @@ for i in range(1,params.computeNodeCount+1):
 #
 # Print and go!
 #
-pc.printRequestRSpec(request)
+pc.printRequestRSpec(rspec_)

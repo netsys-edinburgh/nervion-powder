@@ -117,16 +117,17 @@ if params.EPC == "OAI":
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+    connectOAI_DS(epc)
 elif params.EPC == "srsLTE":
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
+    connectOAI_DS(epc)
 elif params.EPC == "MobileStream":
     epc.disk_image = GLOBALS.MSIMG
     epc.hardware_type = "d430"
     epc.Site('EPC')
 
-connectOAI_DS(epc)
 #epclink.addNode(epc)
 cintf = net_d.addMember(epc)
 caddr = rspec.IPv4Address("192.168.4.80", netmask)

@@ -129,7 +129,7 @@ elif params.EPC == "MobileStream":
 connectOAI_DS(epc)
 #epclink.addNode(epc)
 cintf = net_d.addMember(epc)
-caddr = PG.IPv4Address("192.168.4.80", netmask)
+caddr = rspec.IPv4Address("192.168.4.80", netmask)
 cintf.addAddress(caddr)
 
 multiplexer = request.XenVM('multiplexer')
@@ -141,7 +141,7 @@ multiplexer.Site('Multiplexer')
 multiplexer.addService(rspec.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
 #epclink.addNode(multiplexer)
 cintf = net_d.addMember(multiplexer)
-caddr = PG.IPv4Address("192.168.4.81", netmask)
+caddr = rspec.IPv4Address("192.168.4.81", netmask)
 cintf.addAddress(caddr)
 
 # Node kube-server
@@ -154,7 +154,7 @@ kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-ST
 kube_m.Site('Nervion')
 #epclink.addNode(kube_m)
 cintf = net_d.addMember(kube_m)
-caddr = PG.IPv4Address("192.168.4.82", netmask)
+caddr = rspec.IPv4Address("192.168.4.82", netmask)
 cintf.addAddress(caddr)
 
 master_command = "/local/repository/scripts/master.sh"
@@ -171,7 +171,7 @@ for i in range(1,params.computeNodeCount+1):
     kube_s.Site('Nervion')
     #epclink.addNode(kube_s)
     cintf = net_d.addMember(kube_s)
-    caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
+    caddr = rspec.IPv4Address("192.168.4." + str(i+83), netmask)
     cintf.addAddress(caddr)
     kube_s.addService(rspec.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 

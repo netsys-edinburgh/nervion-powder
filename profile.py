@@ -103,7 +103,7 @@ request.addTour(tour)
 
 
 #epclink = request.Link("s1-lan")
-net_d = rspec_.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
+net_d = rspec_.EPClan(PN.EPCLANS.NET_D, vmlan = 0)
 
 
 netmask="255.255.255.0"

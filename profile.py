@@ -13,7 +13,7 @@ Not instructions yet
 # Standard geni-lib/portal libraries
 #
 import geni.portal as portal
-import geni.rspec.pg as rspec
+import geni.rspec.pg as PG
 import geni.rspec.emulab as elab
 import geni.rspec.igext as IG
 import geni.urn as URN
@@ -38,18 +38,17 @@ class GLOBALS(object):
     OAI_SIM_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU14-64-OAI")
     OAI_SRS_EPC = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:srsEPC-OAICN")
     OAI_CONF_SCRIPT = "/usr/bin/sudo /local/repository/bin/config_oai.pl"
-    NUC_HWTYPE = "nuc5300"
-    UE_HWTYPE = "nexus5"
+    MSIMG = "urn:publicid:IDN+emulab.net+image+PhantomNet:mobilestreamV1.node0"
 
 def connectOAI_DS(node):
     # Create remote read-write clone dataset object bound to OAI dataset
-    bs = request.RemoteBlockstore("ds-%s" % node.name, "/opt/oai")
+    bs = rspec.RemoteBlockstore("ds-%s" % node.name, "/opt/oai")
     bs.dataset = GLOBALS.OAI_DS
     bs.Site('EPC')
     bs.rwclone = True
     # Create link from node to OAI dataset rw clone
     node_if = node.addInterface("dsif_%s" % node.name)
-    bslink = request.Link("dslink_%s" % node.name)
+    bslink = rspec.Link("dslink_%s" % node.name)
     bslink.addInterface(node_if)
     bslink.addInterface(bs.interface)
     bslink.vlan_tagging = True
@@ -64,13 +63,12 @@ pc = portal.Context()
 # Profile parameters.
 #
 
-sim_hardware_types = ['d430','d740']
-
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
-pc.defineParameter("EPC", "OpenAirInterface (true) or srsLTE (false)",
-                   portal.ParameterType.BOOLEAN, True)
-pc.defineParameter("nodeType", "Type of node to use", portal.ParameterType.NODETYPE, "d430")
+pc.defineParameter("EPC", "OpenAirInterface, srsLTE or MobileStream",
+                   portal.ParameterType.INTEGER, 1)
+pc.defineParameter("EPC", "EPC implementation",
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream")])
 
 params = pc.bindParameters()
 
@@ -80,81 +78,110 @@ params = pc.bindParameters()
 #
 pc.verifyParameters()
 
-#
-# Create our in-memory model of the RSpec -- the resources we're going
-# to request in our experiment, and their configuration.
-#
-request = pc.makeRequestRSpec()
+
+if params.EPC == "OAI":
+    rspec = pc.makeRequestRSpec()
+    epc = rspec.RawPC("epc")
+    epc.disk_image = GLOBALS.OAI_EPC_IMG
+    epc.Site('EPC')
+    epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+    connectOAI_DS(epc)
+elif params.EPC == "srsLTE":
+    rspec = pc.makeRequestRSpec()
+    epc = rspec.RawPC("epc")
+    epc.disk_image = GLOBALS.OAI_EPC_IMG
+    epc.Site('EPC')
+    epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
+    connectOAI_DS(epc)
+elif params.EPC == "MobileStream":
+    rspec = PG.Request()
+    epc = rspec.RawPC("node0")
+    epc.disk_image = GLOBALS.MSIMG
+    epc.hardware_type = "d430"
+    ms = True
+    #epc.Site('EPC')
+    
 
 tour = IG.Tour()
 tour.Description(IG.Tour.TEXT,kube_description)
 tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
-request.addTour(tour)
+rspec.addTour(tour)
 
 
-epclink = request.Link("s1-lan")
+netmask="255.255.255.0"
 
 
-#epc1 = request.RawPC('epc')
-#epc1.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
-#epc1.Site('EPC')
-#epclink.addNode(epc1)
+ms = False
 
+epclink = rspec.Link("s1-lan")
+usevms = 0
+net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
 
-# Add OAI EPC (HSS, MME, SPGW) node.
-epc = request.RawPC("epc")
-epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.Site('EPC')
-
-# TODO
-if params.EPC:
-    epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
+if ms == False:
+    epclink.addNode(epc)
 else:
-    epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
+    cintf = net_d.addMember(epc)
+    caddr = PG.IPv4Address("192.168.4.80", netmask)
+    cintf.addAddress(caddr)
 
-connectOAI_DS(epc)
-epclink.addNode(epc)
-
-multiplexer = request.XenVM('multiplexer')
+multiplexer = rspec.XenVM('multiplexer')
 multiplexer.cores = 4
 multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-multiplexer.Site('Multiplexer')
-multiplexer.addService(rspec.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
-epclink.addNode(multiplexer)
+#multiplexer.Site('Nervion')
+multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
+if ms == False:
+    epclink.addNode(multiplexer)
+else:
+    cintf = net_d.addMember(multiplexer)
+    caddr = PG.IPv4Address("192.168.4.81", netmask)
+    cintf.addAddress(caddr)
 
 # Node kube-server
-kube_m = request.XenVM('master')
+kube_m = rspec.XenVM('master')
 kube_m.cores = 4
 kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
-# kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU16-64-STD'
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-kube_m.Site('Nervion')
-epclink.addNode(kube_m)
-#iface0 = kube_m.addInterface('interface-0')
+#kube_m.Site('Nervion')
+if ms == False:
+    epclink.addNode(kube_m)
+else:
+    cintf = net_d.addMember(kube_m)
+    caddr = PG.IPv4Address("192.168.4.82", netmask)
+    cintf.addAddress(caddr)
 
 master_command = "/local/repository/scripts/master.sh"
 
-kube_m.addService(rspec.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
+kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
 
 #slave_ifaces = []
 for i in range(1,params.computeNodeCount+1):
-    kube_s = request.XenVM('slave'+str(i))
+    kube_s = rspec.XenVM('slave'+str(i))
     kube_s.cores = 4
     kube_s.ram = 1024 * 8
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    kube_s.Site('Nervion')
-    epclink.addNode(kube_s)
-    kube_s.addService(rspec.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
+    #kube_s.Site('Nervion')
+    if ms == False:
+        epclink.addNode(kube_s)
+    else:
+        cintf = net_d.addMember(kube_s)
+        caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
+        cintf.addAddress(caddr)
+    kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 
-epclink.link_multiplexing = True
-epclink.vlan_tagging = True
-epclink.best_effort = True
+if ms == False:
+    epclink.link_multiplexing = True
+    epclink.vlan_tagging = True
+    epclink.best_effort = True
+else:
+    net_d.link_multiplexing = True
+    net_d.vlan_tagging = True
+    net_d.best_effort = True
 
 #
 # Print and go!
 #
-pc.printRequestRSpec(request)
+pc.printRequestRSpec(rspec)

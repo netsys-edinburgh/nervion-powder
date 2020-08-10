@@ -61,6 +61,13 @@ def connectOAI_DS(node):
 #
 pc = portal.Context()
 
+
+#
+# Create our in-memory model of the RSpec -- the resources we're going
+# to request in our experiment, and their configuration.
+#
+rspec_ = rspec.Request()
+
 #
 # Profile parameters.
 #
@@ -96,7 +103,7 @@ request.addTour(tour)
 
 
 #epclink = request.Link("s1-lan")
-net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
+net_d = rspec_.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
 
 
 netmask="255.255.255.0"

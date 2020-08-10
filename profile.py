@@ -38,6 +38,7 @@ class GLOBALS(object):
     OAI_SIM_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU14-64-OAI")
     OAI_SRS_EPC = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:srsEPC-OAICN")
     OAI_CONF_SCRIPT = "/usr/bin/sudo /local/repository/bin/config_oai.pl"
+    MSIMG = "urn:publicid:IDN+emulab.net+image+PhantomNet:mobilestreamV1.node0"
     NUC_HWTYPE = "nuc5300"
     UE_HWTYPE = "nexus5"
 
@@ -68,8 +69,10 @@ sim_hardware_types = ['d430','d740']
 
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
-pc.defineParameter("EPC", "OpenAirInterface (true) or srsLTE (false)",
-                   portal.ParameterType.BOOLEAN, True)
+pc.defineParameter("EPC", "OpenAirInterface (1), srsLTE (2) or MobileStream (3)",
+                   portal.ParameterType.INTEGER, 1)
+pc.defineParameter("EPC", "EPC implementation",
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream")])
 pc.defineParameter("nodeType", "Type of node to use", portal.ParameterType.NODETYPE, "d430")
 
 params = pc.bindParameters()
@@ -103,14 +106,20 @@ epclink = request.Link("s1-lan")
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
-epc.disk_image = GLOBALS.OAI_EPC_IMG
-epc.Site('EPC')
 
 # TODO
-if params.EPC:
+if params.EPC == "OAI":
+    epc.disk_image = GLOBALS.OAI_EPC_IMG
+    epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
-else:
+elif params.EPC == "srsLTE":
+    epc.disk_image = GLOBALS.OAI_EPC_IMG
+    epc.Site('EPC')
     epc.addService(rspec.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
+elif params.EPC == "MobileStream":
+    epc.disk_image = GLOBALS.MSIMG
+    epc.hardware_type = "d430"
+    epc.Site('EPC')
 
 connectOAI_DS(epc)
 epclink.addNode(epc)

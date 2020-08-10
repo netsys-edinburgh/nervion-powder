@@ -78,6 +78,7 @@ params = pc.bindParameters()
 #
 pc.verifyParameters()
 
+ms = False
 
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
@@ -110,16 +111,12 @@ rspec.addTour(tour)
 
 netmask="255.255.255.0"
 
-
-ms = False
-
-epclink = rspec.Link("s1-lan")
-usevms = 0
-net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
-
 if ms == False:
+    epclink = rspec.Link("s1-lan")
     epclink.addNode(epc)
 else:
+    usevms = 0
+    net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
     cintf = net_d.addMember(epc)
     caddr = PG.IPv4Address("192.168.4.80", netmask)
     cintf.addAddress(caddr)

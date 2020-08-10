@@ -121,7 +121,7 @@ elif params.EPC == "MobileStream":
     ms = True
     #epc.Site('EPC')
 
-epclink = request.Link("s1-lan")
+epclink = rspec.Link("s1-lan")
 usevms = 0
 net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
 

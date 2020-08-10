@@ -98,7 +98,7 @@ rspec.addTour(tour)
 
 
 #epclink = request.Link("s1-lan")
-usevms
+usevms = 0
 net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
 
 

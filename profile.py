@@ -154,7 +154,7 @@ master_command = "/local/repository/scripts/master.sh"
 kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
 
 #slave_ifaces = []
-for i in range(1,params.computeNodeCount+1):
+for i in range(0,params.computeNodeCount):
     kube_s = rspec.XenVM('slave'+str(i))
     kube_s.cores = 4
     kube_s.ram = 1024 * 8
@@ -165,7 +165,7 @@ for i in range(1,params.computeNodeCount+1):
         epclink.addNode(kube_s)
     else:
         cintf = net_d.addMember(kube_s)
-        caddr = PG.IPv4Address("192.168.4." + str(i+82), netmask)
+        caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
         cintf.addAddress(caddr)
     kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 

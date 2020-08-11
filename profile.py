@@ -98,7 +98,7 @@ elif params.EPC == "MobileStream":
     rspec = PG.Request()
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
-    epc.hardware_type = "d430"
+    epc.hardware_type = "d710"
     ms = True
     #epc.Site('EPC')
     
@@ -165,7 +165,7 @@ for i in range(1,params.computeNodeCount+1):
         epclink.addNode(kube_s)
     else:
         cintf = net_d.addMember(kube_s)
-        caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
+        caddr = PG.IPv4Address("192.168.4." + str(i+82), netmask)
         cintf.addAddress(caddr)
     kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 

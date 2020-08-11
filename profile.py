@@ -96,15 +96,15 @@ elif params.EPC == "srsLTE":
     connectOAI_DS(epc)
 elif params.EPC == "MobileStream":
     rspec = PG.Request()
-    #epc = rspec.RawPC("node0")
-    #epc.disk_image = GLOBALS.MSIMG
+    epc = rspec.RawPC("node0")
+    epc.disk_image = GLOBALS.MSIMG
     #epc.hardware_type = "d430"
 
-    epc = rspec.XenVM('node0')
-    epc.cores = 4
-    epc.ram = 1024 * 8
-    epc.routable_control_ip = True
-    epc.disk_image = GLOBALS.MSIMG
+    #epc = rspec.XenVM('node0')
+    #epc.cores = 4
+    #epc.ram = 1024 * 8
+    #epc.routable_control_ip = True
+    #epc.disk_image = GLOBALS.MSIMG
     ms = True
     #epc.Site('EPC')
     

@@ -98,7 +98,7 @@ elif params.EPC == "MobileStream":
     rspec = PG.Request()
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
-    #epc.hardware_type = "d430"
+    epc.hardware_type = "d430"
 
     #epc = rspec.XenVM('node0')
     #epc.cores = 4

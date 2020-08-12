@@ -133,13 +133,14 @@ multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 #multiplexer.Site('Nervion')
-multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.1.2 10.10.1.1"))
 if ms == False:
     epclink.addNode(multiplexer)
+    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1"))
 else:
     cintf = net_d.addMember(multiplexer)
     caddr = PG.IPv4Address("192.168.4.81", netmask)
     cintf.addAddress(caddr)
+    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80"))
 
 # Node kube-server
 kube_m = rspec.XenVM('master')
@@ -160,7 +161,7 @@ master_command = "/local/repository/scripts/master.sh"
 kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
 
 #slave_ifaces = []
-for i in range(1,params.computeNodeCount+1):
+for i in range(0,params.computeNodeCount):
     kube_s = rspec.XenVM('slave'+str(i))
     kube_s.cores = 4
     kube_s.ram = 1024 * 8

@@ -78,7 +78,7 @@ params = pc.bindParameters()
 #
 pc.verifyParameters()
 
-ms = True
+ms = False
 
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()

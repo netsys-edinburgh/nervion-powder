@@ -78,7 +78,7 @@ params = pc.bindParameters()
 #
 pc.verifyParameters()
 
-ms = False
+ms = True
 
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
@@ -135,12 +135,12 @@ multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-
 #multiplexer.Site('Nervion')
 if ms == False:
     epclink.addNode(multiplexer)
-    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1"))
+    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1 &"))
 else:
     cintf = net_d.addMember(multiplexer)
     caddr = PG.IPv4Address("192.168.4.81", netmask)
     cintf.addAddress(caddr)
-    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80"))
+    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
 
 # Node kube-server
 kube_m = rspec.XenVM('master')

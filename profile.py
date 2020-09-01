@@ -38,7 +38,7 @@ class GLOBALS(object):
     OAI_SIM_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU14-64-OAI")
     OAI_SRS_EPC = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:srsEPC-OAICN")
     OAI_CONF_SCRIPT = "/usr/bin/sudo /local/repository/bin/config_oai.pl"
-    MSIMG = "urn:publicid:IDN+emulab.net+image+PhantomNet:mobilestreamV1.node0"
+    MSIMG = "urn:publicid:IDN+emulab.net+image+PhantomNet:mobilestream-v1"
 
 def connectOAI_DS(node):
     # Create remote read-write clone dataset object bound to OAI dataset

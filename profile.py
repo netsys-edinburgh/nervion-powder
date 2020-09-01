@@ -99,14 +99,8 @@ elif params.EPC == "MobileStream":
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
     epc.hardware_type = "d430"
-
-    #epc = rspec.XenVM('node0')
-    #epc.cores = 4
-    #epc.ram = 1024 * 8
-    #epc.routable_control_ip = True
-    #epc.disk_image = GLOBALS.MSIMG
     ms = True
-    #epc.Site('EPC')
+    epc.Site('EPC')
     
 
 tour = IG.Tour()
@@ -132,7 +126,7 @@ multiplexer.cores = 4
 multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-#multiplexer.Site('Nervion')
+multiplexer.Site('Nervion')
 if ms == False:
     epclink.addNode(multiplexer)
     multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1 &"))
@@ -148,7 +142,7 @@ kube_m.cores = 4
 kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-#kube_m.Site('Nervion')
+kube_m.Site('Nervion')
 if ms == False:
     epclink.addNode(kube_m)
 else:
@@ -167,7 +161,7 @@ for i in range(0,params.computeNodeCount):
     kube_s.ram = 1024 * 8
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    #kube_s.Site('Nervion')
+    kube_s.Site('Nervion')
     if ms == False:
         epclink.addNode(kube_s)
     else:

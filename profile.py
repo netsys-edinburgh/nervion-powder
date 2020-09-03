@@ -52,8 +52,8 @@ def connectOAI_DS(node):
     bslink.addInterface(node_if)
     bslink.addInterface(bs.interface)
     bslink.vlan_tagging = True
-    bslink.best_effort = True
-    
+    bslink.best_effort = True  
+
 #
 # This geni-lib script is designed to run in the PhantomNet Portal.
 #
@@ -119,9 +119,14 @@ else:
     usevms = 0
     # net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
     net_d = rspec.Link("s1-lan")
-    cintf = net_d.addMember(epc)
-    caddr = PG.IPv4Address("192.168.4.80", netmask)
-    cintf.addAddress(caddr)
+
+    #cintf = net_d.addMember(epc)
+    #caddr = PG.IPv4Address("192.168.4.80", netmask)
+    #cintf.addAddress(caddr)
+
+    iface = epc.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
+    net_d.addInterface(iface)
 
 multiplexer = rspec.XenVM('multiplexer')
 multiplexer.cores = 4
@@ -133,9 +138,12 @@ if ms == False:
     epclink.addNode(multiplexer)
     multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1 &"))
 else:
-    cintf = net_d.addMember(multiplexer)
-    caddr = PG.IPv4Address("192.168.4.81", netmask)
-    cintf.addAddress(caddr)
+    #cintf = net_d.addMember(multiplexer)
+    #caddr = PG.IPv4Address("192.168.4.81", netmask)
+    #cintf.addAddress(caddr)
+    iface = multiplexer.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
+    net_d.addInterface(iface)
     multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
 
 # Node kube-server
@@ -148,9 +156,12 @@ kube_m.Site('Nervion')
 if ms == False:
     epclink.addNode(kube_m)
 else:
-    cintf = net_d.addMember(kube_m)
-    caddr = PG.IPv4Address("192.168.4.82", netmask)
-    cintf.addAddress(caddr)
+    #cintf = net_d.addMember(kube_m)
+    #caddr = PG.IPv4Address("192.168.4.82", netmask)
+    #cintf.addAddress(caddr)
+    iface = kube_m.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
+    net_d.addInterface(iface)
 
 master_command = "/local/repository/scripts/master.sh"
 
@@ -167,9 +178,12 @@ for i in range(0,params.computeNodeCount):
     if ms == False:
         epclink.addNode(kube_s)
     else:
-        cintf = net_d.addMember(kube_s)
-        caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
-        cintf.addAddress(caddr)
+        #cintf = net_d.addMember(kube_s)
+        #caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
+        #cintf.addAddress(caddr)
+        iface = kube_s.addInterface()
+        iface.addAddress(PG.IPv4Address("192.168.4." + str(i+83), netmask))
+        net_d.addInterface(iface)
     kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 
 if ms == False:

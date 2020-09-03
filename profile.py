@@ -113,8 +113,10 @@ netmask="255.255.255.0"
 
 if ms == False:
     epclink = rspec.Link("s1-lan")
-    epclink.addNode(epc)
-    # add_Node(epclink, epc, "192.168.5.80", netmask)
+    #epclink.addNode(epc)
+    iface = epc.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
+    epclink.addInterface(iface)
 else:
     usevms = 0
     # net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
@@ -135,7 +137,10 @@ multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 multiplexer.Site('Nervion')
 if ms == False:
-    epclink.addNode(multiplexer)
+    #epclink.addNode(multiplexer)
+    iface = multiplexer.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
+    epclink.addInterface(iface)
     multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1 &"))
 else:
     #cintf = net_d.addMember(multiplexer)
@@ -154,7 +159,10 @@ kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')
 if ms == False:
-    epclink.addNode(kube_m)
+    #epclink.addNode(kube_m)
+    iface = kube_m.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
+    epclink.addInterface(iface)
 else:
     #cintf = net_d.addMember(kube_m)
     #caddr = PG.IPv4Address("192.168.4.82", netmask)
@@ -176,7 +184,10 @@ for i in range(0,params.computeNodeCount):
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')
     if ms == False:
-        epclink.addNode(kube_s)
+        #epclink.addNode(kube_s)
+        iface = kube_s.addInterface()
+        iface.addAddress(PG.IPv4Address("192.168.4." + str(i+83), netmask))
+        epclink.addInterface(iface)
     else:
         #cintf = net_d.addMember(kube_s)
         #caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)

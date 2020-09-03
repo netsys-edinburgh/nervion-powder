@@ -53,11 +53,11 @@ def connectOAI_DS(node):
     bslink.addInterface(bs.interface)
     bslink.vlan_tagging = True
     bslink.best_effort = True
-
-def add_Node(link, node, ip, mask):
-    iface = node.addInterface()
-    iface.addAddress(PG.IPv4Address(ip, mask))
-    link.addInterface(iface)
+    
+#def add_Node(link, node, ip, mask):
+#    iface = node.addInterface()
+#    iface.addAddress(PG.IPv4Address(ip, mask))
+#    link.addInterface(iface)
 
 #
 # This geni-lib script is designed to run in the PhantomNet Portal.

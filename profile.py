@@ -78,8 +78,6 @@ params = pc.bindParameters()
 #
 pc.verifyParameters()
 
-ms = False
-
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
     epc = rspec.RawPC("epc")
@@ -99,7 +97,6 @@ elif params.EPC == "MobileStream":
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
     epc.hardware_type = "d430"
-    ms = True
     epc.Site('EPC')
     
 
@@ -111,24 +108,10 @@ rspec.addTour(tour)
 
 netmask="255.255.255.0"
 
-if ms == False:
-    epclink = rspec.Link("s1-lan")
-    #epclink.addNode(epc)
-    iface = epc.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
-    epclink.addInterface(iface)
-else:
-    usevms = 0
-    # net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
-    net_d = rspec.Link("s1-lan")
-
-    #cintf = net_d.addMember(epc)
-    #caddr = PG.IPv4Address("192.168.4.80", netmask)
-    #cintf.addAddress(caddr)
-
-    iface = epc.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
-    net_d.addInterface(iface)
+epclink = rspec.Link("s1-lan")
+iface = epc.addInterface()
+iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
+epclink.addInterface(iface)
 
 multiplexer = rspec.XenVM('multiplexer')
 multiplexer.cores = 4
@@ -136,20 +119,11 @@ multiplexer.ram = 1024 * 8
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 multiplexer.Site('Nervion')
-if ms == False:
-    #epclink.addNode(multiplexer)
-    iface = multiplexer.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
-    epclink.addInterface(iface)
-    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 10.10.2.2 10.10.2.1 &"))
-else:
-    #cintf = net_d.addMember(multiplexer)
-    #caddr = PG.IPv4Address("192.168.4.81", netmask)
-    #cintf.addAddress(caddr)
-    iface = multiplexer.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
-    net_d.addInterface(iface)
-    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
+iface = multiplexer.addInterface()
+iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
+epclink.addInterface(iface)
+multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
+
 
 # Node kube-server
 kube_m = rspec.XenVM('master')
@@ -158,18 +132,9 @@ kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')
-if ms == False:
-    #epclink.addNode(kube_m)
-    iface = kube_m.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
-    epclink.addInterface(iface)
-else:
-    #cintf = net_d.addMember(kube_m)
-    #caddr = PG.IPv4Address("192.168.4.82", netmask)
-    #cintf.addAddress(caddr)
-    iface = kube_m.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
-    net_d.addInterface(iface)
+iface = kube_m.addInterface()
+iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
+epclink.addInterface(iface)
 
 master_command = "/local/repository/scripts/master.sh"
 
@@ -183,28 +148,18 @@ for i in range(0,params.computeNodeCount):
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')
-    if ms == False:
-        #epclink.addNode(kube_s)
-        iface = kube_s.addInterface()
-        iface.addAddress(PG.IPv4Address("192.168.4." + str(i+83), netmask))
-        epclink.addInterface(iface)
-    else:
-        #cintf = net_d.addMember(kube_s)
-        #caddr = PG.IPv4Address("192.168.4." + str(i+83), netmask)
-        #cintf.addAddress(caddr)
-        iface = kube_s.addInterface()
-        iface.addAddress(PG.IPv4Address("192.168.4." + str(i+83), netmask))
-        net_d.addInterface(iface)
+    iface = kube_s.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4." + str(i+83), netmask))
+    epclink.addInterface(iface)
     kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/slave.sh"))
 
-if ms == False:
-    epclink.link_multiplexing = True
-    epclink.vlan_tagging = True
-    epclink.best_effort = True
-else:
-    net_d.link_multiplexing = True
-    net_d.vlan_tagging = True
-    net_d.best_effort = True
+
+
+epclink.link_multiplexing = True
+epclink.vlan_tagging = True
+epclink.best_effort = True
+
+
 
 #
 # Print and go!

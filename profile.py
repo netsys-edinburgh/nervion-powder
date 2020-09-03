@@ -54,6 +54,11 @@ def connectOAI_DS(node):
     bslink.vlan_tagging = True
     bslink.best_effort = True
 
+def add_Node(link, node, ip, mask):
+    iface = node.addInterface()
+    iface.addAddress(PG.IPv4Address(ip, mask))
+    link.addInterface(iface)
+
 #
 # This geni-lib script is designed to run in the PhantomNet Portal.
 #
@@ -114,9 +119,11 @@ netmask="255.255.255.0"
 if ms == False:
     epclink = rspec.Link("s1-lan")
     epclink.addNode(epc)
+    # add_Node(epclink, epc, "192.168.5.80", netmask)
 else:
     usevms = 0
-    net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
+    # net_d = rspec.EPClan(PN.EPCLANS.NET_D, vmlan = usevms)
+    net_d = rspec.Link("s1-lan")
     cintf = net_d.addMember(epc)
     caddr = PG.IPv4Address("192.168.4.80", netmask)
     cintf.addAddress(caddr)

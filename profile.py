@@ -135,9 +135,6 @@ kube_m.Site('Nervion')
 iface = kube_m.addInterface()
 iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
 epclink.addInterface(iface)
-
-master_command = "/local/repository/scripts/master.sh"
-
 kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
 
 #slave_ifaces = []

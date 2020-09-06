@@ -10,7 +10,7 @@ sudo bash JNIHeader.sh
 echo 'Patching C++ code...'
 for value in {1..6}
 do
-	sed -i -e '242d' /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/mobilestream/src/block/mobility_mgt.cc
+	sed -i -e '240d' /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/mobilestream/src/block/mobility_mgt.cc
 done
 
 sed -i -e '20s/INTEGRITY_ALGORITHM_ID_128_EIA1/INTEGRITY_ALGORITHM_ID_128_EIA2/' /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/mobilestream/src/block/integrity.cc

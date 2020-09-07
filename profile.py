@@ -114,8 +114,8 @@ iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
 epclink.addInterface(iface)
 
 multiplexer = rspec.XenVM('multiplexer')
-multiplexer.cores = 4
-multiplexer.ram = 1024 * 8
+multiplexer.cores = 2
+multiplexer.ram = 1024 * 4
 multiplexer.routable_control_ip = True
 multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 multiplexer.Site('Nervion')
@@ -140,8 +140,8 @@ kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ma
 #slave_ifaces = []
 for i in range(0,params.computeNodeCount):
     kube_s = rspec.XenVM('slave'+str(i))
-    kube_s.cores = 4
-    kube_s.ram = 1024 * 8
+    kube_s.cores = 2
+    kube_s.ram = 1024 * 4
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')

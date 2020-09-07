@@ -19,8 +19,8 @@ sed -i -e '29s/INTEGRITY_ALGORITHM_ID_128_EIA2/INTEGRITY_ALGORITHM_ID_128_EIA1/'
 rm /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/mobilestream/src/block/*-e
 
 echo 'Populating HSS DB with 4096 UEs...'
-cd /opt/mobilestream-conext/mobilestreamconext/testbed/hss/
-sudo bash provision.sh 4096
+sudo sed -i 's/$1/4096/g' /opt/mobilestream-conext/mobilestreamconext/testbed/hss/provision.sh
+
 
 cd /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/build/
 sudo cmake ../

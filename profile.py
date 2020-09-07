@@ -127,8 +127,8 @@ multiplexer.addService(PG.Execute(shell="bash", command="python /local/repositor
 
 # Node kube-server
 kube_m = rspec.XenVM('master')
-kube_m.cores = 2
-kube_m.ram = 1024 * 4
+kube_m.cores = 4
+kube_m.ram = 1024 * 8
 kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')

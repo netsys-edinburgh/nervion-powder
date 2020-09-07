@@ -69,6 +69,8 @@ pc.defineParameter("EPC", "OpenAirInterface, srsLTE or MobileStream",
                    portal.ParameterType.INTEGER, 1)
 pc.defineParameter("EPC", "EPC implementation",
                    portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream")])
+pc.defineParameter("multi", "Multiplexer (True or False)",
+                   portal.ParameterType.BOOLEAN, True)
 
 params = pc.bindParameters()
 
@@ -113,16 +115,17 @@ iface = epc.addInterface()
 iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
 epclink.addInterface(iface)
 
-multiplexer = rspec.XenVM('multiplexer')
-multiplexer.cores = 2
-multiplexer.ram = 1024 * 4
-multiplexer.routable_control_ip = True
-multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-multiplexer.Site('Nervion')
-iface = multiplexer.addInterface()
-iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
-epclink.addInterface(iface)
-multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
+if params.multi == True:    
+    multiplexer = rspec.XenVM('multiplexer')
+    multiplexer.cores = 2
+    multiplexer.ram = 1024 * 4
+    multiplexer.routable_control_ip = True
+    multiplexer.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+    multiplexer.Site('Nervion')
+    iface = multiplexer.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
+    epclink.addInterface(iface)
+    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
 
 
 # Node kube-server

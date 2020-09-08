@@ -19,8 +19,11 @@ sed -i -e '29s/INTEGRITY_ALGORITHM_ID_128_EIA2/INTEGRITY_ALGORITHM_ID_128_EIA1/'
 rm /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/mobilestream/src/block/*-e
 
 echo 'Populating HSS DB with 4096 UEs...'
-sudo sed -i 's/$1/4096/g' /opt/mobilestream-conext/mobilestreamconext/testbed/hss/provision.sh
-
+cd /opt/mobilestream-conext/mobilestreamconext/testbed/hss/
+sudo rm LTE_fdd_enodeb.user_db
+sudo rm ../storm/LTE_fdd_enodeb.user_db
+sudo bash provision.sh 4096
+sudo cp LTE_fdd_enodeb.user_db ../storm/
 
 cd /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/build/
 sudo cmake ../

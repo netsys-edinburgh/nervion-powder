@@ -65,12 +65,19 @@ pc = portal.Context()
 
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
-pc.defineParameter("EPC", "OpenAirInterface, srsLTE or MobileStream",
-                   portal.ParameterType.INTEGER, 1)
 pc.defineParameter("EPC", "EPC implementation",
                    portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
                    portal.ParameterType.BOOLEAN, True)
+pc.defineParameter("cores", "Number of cores",
+                   portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20")],
+                   longDescription="Number of cores of each Nervion node.",
+                   advanced=True)
+pc.defineParameter("ram", "RAM size",
+                   portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
+                   longDescription="RAM size (GB)",
+                   advanced=True)
+
 
 params = pc.bindParameters()
 
@@ -143,8 +150,8 @@ kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ma
 #slave_ifaces = []
 for i in range(0,params.computeNodeCount):
     kube_s = rspec.XenVM('slave'+str(i))
-    kube_s.cores = 4
-    kube_s.ram = 1024 * 8
+    kube_s.cores = int(params.cores)
+    kube_s.ram = 1024 * int(params.ram)
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')

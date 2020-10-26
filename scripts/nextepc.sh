@@ -20,3 +20,7 @@ curl -sL https://nextepc.org/static/webui/install | sudo -E bash -
 # Install DB populator dependencies
 sudo apt install python3-pip
 pip3 install pymongo
+
+# Patch NextEPC config files
+
+# Restart EPC service

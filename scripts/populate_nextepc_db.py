@@ -3,7 +3,7 @@ import sys
 
 
 json_string = {
-	"imsi":"208930000000009",
+	"imsi":"208930000000000",
 	"security":
 		{"k":"00000000 00000000 00000000 00000000",
 		"amf":"8000",
@@ -22,8 +22,8 @@ mydb = myclient["nextepc"]
 mycol = mydb['subscribers']
 
 for i in range(int(sys.argv[1])):
-	json_string["imsi"] = '20893' + "{:010d}".format(i)
-	print(json_string['imsi'])
-	mycol.insert_one(json_string)
+	json_string["imsi"] = '20893' + "{:010d}".format(i+1)
+	tmp = json_string.copy()
+	mycol.insert_one(tmp)
 
 print('Done!')

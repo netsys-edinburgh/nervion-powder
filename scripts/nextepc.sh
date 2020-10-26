@@ -18,7 +18,7 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 curl -sL https://nextepc.org/static/webui/install | sudo -E bash -
 
 # Install DB populator dependencies
-sudo apt install python3-pip
+sudo apt-get -y install python3-pip
 pip3 install pymongo
 
 # Patch NextEPC config files

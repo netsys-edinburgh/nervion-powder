@@ -21,6 +21,11 @@ curl -sL https://nextepc.org/static/webui/install | sudo -E bash -
 sudo apt-get -y install python3-pip
 pip3 install pymongo
 
+cd /local/repository/scripts
+
+# Populate DB
+python3 populate_nextepc_db.py 2048
+
 # Patch NextEPC config files
 cd /etc/nextepc/
 # MME.CONF

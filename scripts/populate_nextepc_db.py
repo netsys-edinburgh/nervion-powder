@@ -21,7 +21,7 @@ myclient = pymongo.MongoClient("mongodb://localhost/nextepc")
 mydb = myclient["nextepc"]
 mycol = mydb['subscribers']
 
-for i in range(1, int(sys.argv[1]) + 1):
+for i in range(int(sys.argv[1])):
 	json_string["imsi"] = '20893' + "{:010d}".format(i+1)
 	tmp = json_string.copy()
 	mycol.insert_one(tmp)

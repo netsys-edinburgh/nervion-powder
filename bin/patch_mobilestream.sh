@@ -22,7 +22,7 @@ echo 'Populating HSS DB with 4096 UEs...'
 cd /opt/mobilestream-conext/mobilestreamconext/testbed/hss/
 sudo rm LTE_fdd_enodeb.user_db
 sudo rm ../storm/LTE_fdd_enodeb.user_db
-sudo bash provision.sh 4096
+sudo bash provision.sh 10240
 sudo cp LTE_fdd_enodeb.user_db ../storm/
 
 cd /opt/mobilestream-conext/mobilestreamconext/MobileStream-C++/build/

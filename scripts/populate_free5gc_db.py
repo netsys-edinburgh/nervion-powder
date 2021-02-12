@@ -96,7 +96,6 @@ subscriptionData_provisionedData_smData_2 = {	'servingPlmnId': '20893',
 
 def add_user(num, db):
 	imsi = "imsi-" + plmn + "{:010d}".format(num+1)
-	print(imsi)
 
 	# policyData.ues.amData
 	policyData_ues_amData['ueId'] = imsi

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ~
+
 #Install GTP Kernel module
 echo "Installing 5G GTP Kernel module..."
 git clone https://github.com/PrinzOwO/gtp5g.git
@@ -13,15 +15,14 @@ echo "Installing GO..."
 wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
 sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
 mkdir -p ~/go/{bin,pkg,src}
-echo 'export GOPATH=$HOME/go' >> ~/.bashrc
-echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
-echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
-source ~/.bashrc
+export GOPATH=$HOME/go
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 go get -u github.com/sirupsen/logrus
 
 # Install mongoDB
 echo "Installing MongoDB..."
-sudo apt install mongodb
+sudo apt -y install mongodb
 sudo systemctl start mongodb
 
 # Install Free5GCore
@@ -33,8 +34,8 @@ chmod +x test.sh
 
 # Compile webconsole
 echo "Compiling free5GC webconsole..."
-sudo apt remove cmdtest
-sudo apt remove yarn
+sudo apt -y remove cmdtest
+sudo apt -y remove yarn
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update
@@ -46,7 +47,7 @@ echo "Modifiying configuration files..."
 sudo sed -i 's/- 127.0.0.1/- 192.168.4.80/g' config/amfcfg.yaml
 
 # Add users to the DB
-sudo apt install python3-pip
+sudo apt -y install python3-pip
 pip3 install pymongo
 cd /local/repository/scripts
 # Populate DB

@@ -121,7 +121,6 @@ elif params.EPC == "free5GC":
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     epc.hardware_type = "d430"
     epc.Site('EPC')
-    epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/free5gc_stage1.sh"))
     
 
 tour = IG.Tour()

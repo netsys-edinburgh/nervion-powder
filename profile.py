@@ -91,7 +91,7 @@ if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
     epc = rspec.RawPC("epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
-    epc.hardware_type = "pc3000"
+    epc.hardware_type = "d710"
     epc.Site('EPC')
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
     connectOAI_DS(epc)
@@ -99,27 +99,27 @@ elif params.EPC == "srsLTE":
     rspec = pc.makeRequestRSpec()
     epc = rspec.RawPC("epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
-    epc.hardware_type = "pc3000"
+    epc.hardware_type = "d710"
     epc.Site('EPC')
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
 elif params.EPC == "MobileStream":
     rspec = PG.Request()
     epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
-    epc.hardware_type = "pc3000"
+    epc.hardware_type = "d710"
     epc.Site('EPC')
 elif params.EPC == "NextEPC":
     rspec = PG.Request()
     epc = rspec.RawPC("node0")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    epc.hardware_type = "pc3000"
+    epc.hardware_type = "d710"
     epc.Site('EPC')
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/nextepc.sh"))
 elif params.EPC == "free5GC":
     rspec = PG.Request()
     epc = rspec.RawPC("node0")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    epc.hardware_type = "pc3000"
+    epc.hardware_type = "d710"
     epc.Site('EPC')
     
 

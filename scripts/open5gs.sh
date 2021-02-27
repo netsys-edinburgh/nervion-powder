@@ -18,8 +18,11 @@ sudo apt -y install python3-pip
 pip3 install pymongo
 
 echo "Adding subscribers to the DB..."
-cd /local/repository/scripts
-python3 populate_open5gs_db.py 2048
+for i in $(seq -f "%010g" 1 512)
+do
+	echo "UE: $i"
+	open5gs-dbctl add $i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
+done
 
 echo "Modifying configuration files..."
 sudo cp /local/repository/config/open5gs/amf.yaml /etc/open5gs/

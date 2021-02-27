@@ -17,7 +17,7 @@ ue_template = { 'imsi': '208930000000001',
                 'network_access_mode': 2,
                 'subscriber_status': 0,
                 'access_restriction_data': 32,
-                'security': {'k': '465B5CE8 B199B49F AA5F0A2E E238A6BC', 'amf': '8000', 'op': None, 'opc': 'E8ED289D EBA952E4 283B54E8 8E6183CA', 'sqn': 320}, 
+                'security': {'k': '465B5CE8B199B49FAA5F0A2EE238A6BC', 'amf': '8000', 'op': None, 'opc': 'E8ED289DEBA952E4283B54E88E6183CA', 'sqn': 320}, 
                 '__v': 0}
 
 cli = pymongo.MongoClient("mongodb://localhost/open5gs")

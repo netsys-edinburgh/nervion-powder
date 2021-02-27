@@ -13,15 +13,11 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt -y install nodejs
 curl -sL https://open5gs.org/open5gs/assets/webui/install | sudo -E bash -
 
-# Installing populator script dependencies
-sudo apt -y install python3-pip
-pip3 install pymongo
-
 echo "Adding subscribers to the DB..."
 for i in $(seq -f "%010g" 1 512)
 do
-	echo "UE: $i"
-	open5gs-dbctl add $i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
+	echo "UE: 20893$i"
+	open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
 done
 
 echo "Modifying configuration files..."

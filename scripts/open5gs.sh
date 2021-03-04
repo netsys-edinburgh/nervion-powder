@@ -14,7 +14,7 @@ sudo apt -y install nodejs
 curl -sL https://open5gs.org/open5gs/assets/webui/install | sudo -E bash -
 
 echo "Adding subscribers to the DB..."
-for i in $(seq -f "%010g" 1 512)
+for i in $(seq -f "%010g" 1 1500)
 do
 	echo "UE: 20893$i"
 	open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA

@@ -102,7 +102,7 @@ elif params.EPC == "srsLTE":
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
 elif params.EPC == "MobileStream":
     rspec = PG.Request()
-    epc = rspec.RawPC("epc")
+    epc = rspec.RawPC("node0")
     epc.disk_image = GLOBALS.MSIMG
 elif params.EPC == "NextEPC":
     rspec = PG.Request()

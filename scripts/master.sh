@@ -113,8 +113,7 @@ source <(helm completion bash)
 # (Old method)
 #helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 #helm install --namespace=kube-system metrics-server stable/metrics-server -f ${WORKINGDIR}/config/metrics-server-values.yaml
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --namespace=kube-system metrics-server bitnami/metrics-server -f ${WORKINGDIR}/config/metrics-server-values.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
 # Wait till the slave nodes get joined and update the kubelet daemon successfully
 # number of slaves + 1 master

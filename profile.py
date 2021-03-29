@@ -79,10 +79,6 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
-pc.defineParameter("testNodes", "Test Nodes",
-                   portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
-                   longDescription="Number of workers of the Test implementation",
-                   advanced=True)
 
 
 params = pc.bindParameters()
@@ -149,7 +145,7 @@ epclink.addInterface(iface)
 
 if params.EPC == "Test":
     # Allocate the DB machine
-    db = rspec.RawPC("frontend")
+    db = rspec.RawPC("db")
     db.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     db.hardware_type = params.Hardware
     db.Site('EPC')

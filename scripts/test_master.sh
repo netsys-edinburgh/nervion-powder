@@ -141,6 +141,8 @@ echo "And this is the dashboard credential: $dashboard_credential"
 
 # Deploy emulator
 sudo kubectl create -f config/deployment.yaml
+# Deploy Test Core
+sudo kubectl create -f config/test/deployment.yaml
 
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"

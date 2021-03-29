@@ -66,7 +66,7 @@ pc = portal.Context()
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
 pc.defineParameter("EPC", "EPC implementation",
-                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS")])
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test")])
 pc.defineParameter("Hardware", "EPC hardware",
                    portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
@@ -78,6 +78,10 @@ pc.defineParameter("cores", "Number of cores",
 pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
+                   advanced=True)
+pc.defineParameter("testNodes", "Test Nodes",
+                   portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
+                   longDescription="Number of workers of the Test implementation",
                    advanced=True)
 
 
@@ -118,6 +122,12 @@ elif params.EPC == "free5GC":
     rspec = PG.Request()
     epc = rspec.RawPC("epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+elif params.EPC == "Test":
+    rspec = PG.Request()
+    epc = rspec.RawPC("frontend")
+    epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+    # TODO: add script to install and run the FrontEnd on the IP 192.168.4.80
+    #epc.addService(PG.Execute(shell="bash", command="/local/repository/scripts/"))
 
 epc.hardware_type = params.Hardware
 epc.Site('EPC')
@@ -135,6 +145,20 @@ epclink = rspec.Link("s1-lan")
 iface = epc.addInterface()
 iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
 epclink.addInterface(iface)
+
+
+if params.EPC == "Test":
+    # Allocate the DB machine
+    db = rspec.RawPC("frontend")
+    db.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+    db.hardware_type = params.Hardware
+    db.Site('EPC')
+    iface = db.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.79", netmask))
+    epclink.addInterface(iface)
+    # TODO: add script to install and run the DB on the IP 192.168.4.79
+    #db.addService(PG.Execute(shell="bash", command="/local/repository/scripts/"))
+
 
 if params.multi == True:    
     multiplexer = rspec.XenVM('multiplexer')
@@ -159,7 +183,11 @@ kube_m.Site('Nervion')
 iface = kube_m.addInterface()
 iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
 epclink.addInterface(iface)
-kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
+if params.EPC == "Test":
+    # TODO: Add the deployment.yaml file for the Test Core to config/test/
+    kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_master.sh"))
+else:
+    kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
 
 #slave_ifaces = []
 for i in range(0,params.computeNodeCount):

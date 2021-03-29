@@ -72,7 +72,7 @@ pc.defineParameter("Hardware", "EPC hardware",
 pc.defineParameter("multi", "Multiplexer (True or False)",
                    portal.ParameterType.BOOLEAN, True)
 pc.defineParameter("cores", "Number of cores",
-                   portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20")],
+                   portal.ParameterType.STRING,"4",[("4","4"),("6","6"), ("8", "8"), ("10", "10"), ("12", "12")],
                    longDescription="Number of cores of each Nervion node.",
                    advanced=True)
 pc.defineParameter("ram", "RAM size",

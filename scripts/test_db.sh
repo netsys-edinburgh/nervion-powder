@@ -6,7 +6,7 @@ sudo apt install -y libconfig-dev build-essential make
 
 cd ~
 
-git clone https://j0lama:37962f1338ebfbfad0184e289106a000adcf00bb@github.com/j0lama/CoreKube.git
+git clone https://github.com/j0lama/CoreKube.git
 
 cd CoreKubeDB/
 make

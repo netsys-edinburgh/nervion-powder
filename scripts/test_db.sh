@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # Dependencies
-sudo apt-get install -y libconfig-dev
+sudo apt update
+sudo apt install -y libconfig-dev build-essential make
 
-git clone https://f2729a3624166a650d8a7027f62beaac525a11c0@github.com/j0lama/CoreKubeDB.git
+cd ~
+
+git clone https://j0lama:0b1fe6bbb294fd9d4462f0ac798880d82250d6a8@github.com/j0lama/CoreKube.git
 
 cd CoreKubeDB/
 make

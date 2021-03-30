@@ -122,8 +122,7 @@ elif params.EPC == "Test":
     rspec = PG.Request()
     epc = rspec.RawPC("frontend")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    # TODO: add script to install and run the FrontEnd on the IP 192.168.4.80
-    #epc.addService(PG.Execute(shell="bash", command="/local/repository/scripts/"))
+    epc.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_frontend.sh"))
 
 epc.hardware_type = params.Hardware
 epc.Site('EPC')
@@ -152,8 +151,7 @@ if params.EPC == "Test":
     iface = db.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.79", netmask))
     epclink.addInterface(iface)
-    # TODO: add script to install and run the DB on the IP 192.168.4.79
-    #db.addService(PG.Execute(shell="bash", command="/local/repository/scripts/"))
+    db.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_db.sh"))
 
 
 if params.multi == True:    

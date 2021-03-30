@@ -6,7 +6,7 @@ sudo apt install -y libsctp-dev build-essential make
 
 cd ~
 
-git clone https://@github.com/j0lama/CoreKube.git
+git clone https://github.com/j0lama/CoreKube.git
 
 cd CoreKube/
 make

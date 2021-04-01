@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: corekube-worker
+spec:
+  ports:
+  - name: worker-s1ap
+    port: 5566
+    targetPort: 5566
+    protocol: UDP
+  selector:
+    app: corekube-worker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corekube-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: corekube-worker
+  template:
+    metadata:
+      labels:
+        app: corekube-worker
+    spec:
+      containers:
+      - name: corekube-worker
+        image: corekube-worker:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5566
+          protocol: UDP
+          name: worker-s1ap
+        command: ["./corekube_udp_worker", "$(THIS_POD_IP)", "COREKUBE_DB_IP"]
+        env:
+        - name: THIS_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: corekube-worker
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: corekube-worker
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 5

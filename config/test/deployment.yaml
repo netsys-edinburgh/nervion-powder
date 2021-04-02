@@ -7,9 +7,11 @@ spec:
   - name: worker-s1ap
     port: 5566
     targetPort: 5566
+    nodePort: 32566
     protocol: UDP
   selector:
     app: corekube-worker
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment

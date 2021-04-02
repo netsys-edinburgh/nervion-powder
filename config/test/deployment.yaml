@@ -33,7 +33,7 @@ spec:
         - containerPort: 5566
           protocol: UDP
           name: worker-s1ap
-        command: ["./corekube_udp_worker", "$(THIS_POD_IP)", "COREKUBE_DB_IP"]
+        command: ["./corekube_udp_worker", "$(THIS_POD_IP)", "192.168.4.79"]
         env:
         - name: THIS_POD_IP
           valueFrom:

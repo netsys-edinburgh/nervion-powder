@@ -27,8 +27,7 @@ spec:
     spec:
       containers:
       - name: corekube-worker
-        image: corekube-worker:latest
-        imagePullPolicy: Never
+        image: andrewferguson/corekube-worker:latest
         ports:
         - containerPort: 5566
           protocol: UDP

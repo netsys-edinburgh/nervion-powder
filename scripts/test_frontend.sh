@@ -10,4 +10,4 @@ git clone https://github.com/j0lama/CoreKube.git
 
 cd CoreKube/
 make
-./corekube_frontend 192.168.4.80 192.168.4.78
+./corekube_frontend 192.168.4.80 192.168.4.82

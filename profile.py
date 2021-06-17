@@ -166,7 +166,7 @@ if params.multi == True:
     iface = multiplexer.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.81", netmask))
     epclink.addInterface(iface)
-    multiplexer.addService(PG.Execute(shell="bash", command="python /local/repository/scripts/nervion_mp.py 192.168.4.81 192.168.4.80 &"))
+    multiplexer.addService(PG.Execute(shell="bash", command="bash /local/repository/scripts/multiplexer/run.sh"))
 
 
 # Node kube-server

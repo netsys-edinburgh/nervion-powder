@@ -81,8 +81,6 @@ void * uplink(void * args)
         data.teid = get_ue_teid(buffer);
         data.ue_len = ue_len;
 
-        printf("Uplink TEID: %d\n", data.teid);
-
         /* Save UE address in the hashmap structure */
         if(hashmap_add(map, (uint8_t *) &data, sizeof(Data)) == ERROR)
         {
@@ -117,8 +115,6 @@ void * downlink(void * args)
 
         /* Get UE address based on the TEID */
         data = (Data *) hashmap_get(map, get_ue_teid(buffer));
-
-        printf("Downlink TEID: %d\n", data->teid);
 
         /* Forward packet to the UE */
         sendto(ran_sock, buffer, n, 0, (const struct sockaddr *) &(data->ue_addr), (socklen_t) data->ue_len);

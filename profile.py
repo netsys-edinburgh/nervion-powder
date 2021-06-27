@@ -79,6 +79,8 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
+pc.defineParameter("kc_nodes", "Number of slave/compute nodes",
+                   portal.ParameterType.INTEGER, 1)
 
 
 params = pc.bindParameters()
@@ -88,6 +90,10 @@ params = pc.bindParameters()
 # warnings; this might sys.exit().
 #
 pc.verifyParameters()
+
+
+netmask="255.255.255.0"
+
 
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
@@ -119,14 +125,13 @@ elif params.EPC == "free5GC":
     epc = rspec.RawPC("epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 elif params.EPC == "Test":
-    rspec = PG.Request()
-    epc = rspec.RawPC("frontend")
-    epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    # You have to execute the setup script manually until the repo was public
-    #epc.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_frontend.sh"))
-
-epc.hardware_type = params.Hardware
-epc.Site('EPC')
+    ck_master = rspec.XenVM('masterck')
+    ck_master.cores = 4
+    ck_master.ram = 1024 * 8
+    ck_master.routable_control_ip = True
+    ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+    ck_master.Site('CK')
+    ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
     
 
 tour = IG.Tour()
@@ -134,26 +139,18 @@ tour.Description(IG.Tour.TEXT,kube_description)
 tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
 rspec.addTour(tour)
 
-
-netmask="255.255.255.0"
-
 epclink = rspec.Link("s1-lan")
-iface = epc.addInterface()
-iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
-epclink.addInterface(iface)
 
-
-if params.EPC == "Test":
-    # Allocate the DB machine
-    db = rspec.RawPC("db")
-    db.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    db.hardware_type = params.Hardware
-    db.Site('EPC')
-    iface = db.addInterface()
-    iface.addAddress(PG.IPv4Address("192.168.4.79", netmask))
+if params.EPC == 'Test':
+    iface = ck_master.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
     epclink.addInterface(iface)
-    # You have to execute the setup script manually until the repo was public
-    #db.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_db.sh"))
+else:
+    epc.hardware_type = params.Hardware
+    epc.Site('Core')
+    iface = epc.addInterface()
+    iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
+    epclink.addInterface(iface)
 
 
 if params.multi == True:    
@@ -179,11 +176,20 @@ kube_m.Site('Nervion')
 iface = kube_m.addInterface()
 iface.addAddress(PG.IPv4Address("192.168.4.82", netmask))
 epclink.addInterface(iface)
-if params.EPC == "Test":
-    # TODO: Add the deployment.yaml file for the Test Core to config/test/
-    kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/test_master.sh"))
-else:
-    kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
+kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh"))
+
+if params.EPC == 'Test':
+    for i in range(0,params.kc_nodes):
+        kube_s = rspec.XenVM('slave'+str(i))
+        kube_s.cores = int(params.cores)
+        kube_s.ram = 1024 * int(params.ram)
+        kube_s.routable_control_ip = True
+        kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+        kube_s.Site('CK')
+        iface = kube_s.addInterface()
+        iface.addAddress(PG.IPv4Address("192.168.4." + str(79-i), netmask))
+        epclink.addInterface(iface)
+        kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_slave.sh"))
 
 #slave_ifaces = []
 for i in range(0,params.computeNodeCount):

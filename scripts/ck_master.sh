@@ -118,7 +118,7 @@ helm install --namespace=kube-system metrics-server bitnami/metrics-server -f ${
 
 # Wait till the slave nodes get joined and update the kubelet daemon successfully
 # number of slaves + 1 master
-node_cnt=$(($(/local/repository/scripts/geni-get-param computeNodeCount) + 1))
+node_cnt=$(($(/local/repository/scripts/geni-get-param ck_nodes) + 1))
 # 1 node per line - header line
 joined_cnt=$(( `kubectl get nodes | wc -l` - 1 ))
 echo "Total nodes: $node_cnt Joined: ${joined_cnt}"

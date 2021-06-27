@@ -79,7 +79,7 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
-pc.defineParameter("kc_nodes", "Number of slave/compute nodes for the Test Core",
+pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
                    portal.ParameterType.INTEGER, 1, advanced=True)
 
 
@@ -154,17 +154,17 @@ else:
 
 # CK Slaves
 if params.EPC == 'Test':
-    for i in range(0,params.kc_nodes):
-        kube_s = rspec.XenVM('ck_slave'+str(i))
-        kube_s.cores = int(params.cores)
-        kube_s.ram = 1024 * int(params.ram)
-        kube_s.routable_control_ip = True
-        kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-        kube_s.Site('CK')
-        iface = kube_s.addInterface()
+    for i in range(0,params.ck_nodes):
+        ck_s = rspec.XenVM('ck_slave'+str(i))
+        ck_s.cores = int(params.cores)
+        ck_s.ram = 1024 * int(params.ram)
+        ck_s.routable_control_ip = True
+        ck_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
+        ck_s.Site('CK')
+        iface = ck_s.addInterface()
         iface.addAddress(PG.IPv4Address("192.168.4." + str(79-i), netmask))
         epclink.addInterface(iface)
-        kube_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_slave.sh"))
+        ck_s.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_slave.sh"))
 
 
 # MULTIPLEXER

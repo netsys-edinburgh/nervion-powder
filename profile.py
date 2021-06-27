@@ -92,14 +92,6 @@ params = pc.bindParameters()
 pc.verifyParameters()
 
 
-netmask="255.255.255.0"
-
-tour = IG.Tour()
-tour.Description(IG.Tour.TEXT,kube_description)
-tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
-rspec.addTour(tour)
-
-
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
     epc = rspec.RawPC("epc")
@@ -130,6 +122,7 @@ elif params.EPC == "free5GC":
     epc = rspec.RawPC("epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 elif params.EPC == "Test":
+    rspec = PG.Request()
     ck_master = rspec.XenVM('masterck')
     ck_master.cores = 4
     ck_master.ram = 1024 * 8
@@ -137,6 +130,14 @@ elif params.EPC == "Test":
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     ck_master.Site('CK')
     ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
+
+
+tour = IG.Tour()
+tour.Description(IG.Tour.TEXT,kube_description)
+tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
+rspec.addTour(tour)
+
+netmask="255.255.255.0"
 
 epclink = rspec.Link("s1-lan")
 

@@ -79,8 +79,8 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
-pc.defineParameter("kc_nodes", "Number of slave/compute nodes",
-                   portal.ParameterType.INTEGER, 1)
+pc.defineParameter("kc_nodes", "Number of slave/compute nodes for the Test Core",
+                   portal.ParameterType.INTEGER, 1, advanced=True)
 
 
 params = pc.bindParameters()
@@ -93,6 +93,11 @@ pc.verifyParameters()
 
 
 netmask="255.255.255.0"
+
+tour = IG.Tour()
+tour.Description(IG.Tour.TEXT,kube_description)
+tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
+rspec.addTour(tour)
 
 
 if params.EPC == "OAI":
@@ -132,12 +137,6 @@ elif params.EPC == "Test":
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     ck_master.Site('CK')
     ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
-    
-
-tour = IG.Tour()
-tour.Description(IG.Tour.TEXT,kube_description)
-tour.Instructions(IG.Tour.MARKDOWN,kube_instruction)
-rspec.addTour(tour)
 
 epclink = rspec.Link("s1-lan")
 

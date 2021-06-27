@@ -44,7 +44,7 @@ def connectOAI_DS(node):
     # Create remote read-write clone dataset object bound to OAI dataset
     bs = rspec.RemoteBlockstore("ds-%s" % node.name, "/opt/oai")
     bs.dataset = GLOBALS.OAI_DS
-    bs.Site('EPC')
+    bs.Site('Core')
     bs.rwclone = True
     # Create link from node to OAI dataset rw clone
     node_if = node.addInterface("dsif_%s" % node.name)

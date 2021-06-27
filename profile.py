@@ -180,7 +180,7 @@ kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ma
 
 if params.EPC == 'Test':
     for i in range(0,params.kc_nodes):
-        kube_s = rspec.XenVM('slave'+str(i))
+        kube_s = rspec.XenVM('ck_slave'+str(i))
         kube_s.cores = int(params.cores)
         kube_s.ram = 1024 * int(params.ram)
         kube_s.routable_control_ip = True

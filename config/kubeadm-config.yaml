@@ -6,5 +6,6 @@ controllerManager:
 apiServer:
   extraArgs:
     feature-gates: SCTPSupport=true
+    service-node-port-range: 30000-39000
 networking:
   podSubnet: "10.244.0.0/16"

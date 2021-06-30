@@ -113,9 +113,11 @@ spec:
   ports:
   - port: 36412
     targetPort: 36412
+    nodePort: 36412
     protocol: SCTP
   selector:
     app: corekube-frontend
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -109,13 +109,6 @@ sudo cp linux-amd64/helm /usr/local/bin/helm
 
 source <(helm completion bash)
 
-# Install metrics-server for HPA
-# (Old method)
-#helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-#helm install --namespace=kube-system metrics-server stable/metrics-server -f ${WORKINGDIR}/config/metrics-server-values.yaml
-helm repo add stable https://charts.bitnami.com/bitnami
-helm install --namespace=kube-system metrics-server bitnami/metrics-server -f ${WORKINGDIR}/config/metrics-server-values.yaml
-
 # Wait till the slave nodes get joined and update the kubelet daemon successfully
 # number of slaves + 1 master
 node_cnt=$(($(/local/repository/scripts/geni-get-param computeNodeCount) + 1))
@@ -139,6 +132,8 @@ echo "kubernetes dashboard endpoint: $dashboard_endpoint"
 # dashboard credential
 echo "And this is the dashboard credential: $dashboard_credential"
 
+#Deploy metrics server
+sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy emulator
 sudo kubectl create -f config/deployment.yaml
 

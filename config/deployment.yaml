@@ -68,6 +68,7 @@ metadata:
 spec:
   ports:
   - port: 8080
+    nodePort: 34567
     protocol: TCP
     name: ran-controller
   selector:

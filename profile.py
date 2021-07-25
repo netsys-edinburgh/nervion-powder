@@ -200,7 +200,7 @@ for i in range(0,params.computeNodeCount):
     #kube_s = rspec.XenVM('slave'+str(i))
     #kube_s.cores = int(params.cores)
     #kube_s.ram = 1024 * int(params.ram)
-    kube_s = rspec.RawPC("master")
+    kube_s = rspec.RawPC('slave'+str(i))
     kube_s.hardware_type = params.Hardware
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'

@@ -5,7 +5,7 @@ sudo apt update
 sudo apt -y install software-properties-common
 sudo add-apt-repository ppa:open5gs/latest
 sudo apt update
-sudo apt -y install open5gs=2.1.7
+sudo apt -y install open5gs
 
 echo "Installing webUI"
 sudo apt -y install curl

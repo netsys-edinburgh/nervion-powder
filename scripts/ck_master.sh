@@ -144,6 +144,9 @@ sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy Test Core
 sudo kubectl create -f config/test/deployment.yaml
 
+# Start logging the HPA every second
+config/test/loghpa.sh &
+
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"
 date

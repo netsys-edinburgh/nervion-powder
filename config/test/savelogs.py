@@ -4,8 +4,8 @@ import os, subprocess, signal, time, json
 
 
 ORIGINAL_LOG_DIR="/var/log/containers"
-OUTPUT_LOG_DIR="/users/s1703695/newlogs"
-LOG_FILE="/users/s1703695/log_for_savelogs.log"
+OUTPUT_LOG_DIR=os.path.expanduser("~/newlogs")
+LOG_FILE=os.path.expanduser("~/log_for_savelogs.log")
 
 
 def checkFolders():

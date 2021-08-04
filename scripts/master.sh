@@ -137,6 +137,9 @@ sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy emulator
 sudo kubectl create -f config/deployment.yaml
 
+# Log all the traffic on the Nervion master node
+sudo tcpdump -i any -w ~/tcpdump.pcap &
+
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"
 date

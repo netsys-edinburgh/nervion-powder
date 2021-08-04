@@ -147,6 +147,9 @@ sudo kubectl create -f config/test/deployment.yaml
 # Start logging the HPA every second
 config/test/loghpa.sh &
 
+# Log all the traffic on the CK master node
+sudo tcpdump -i any -w ~/tcpdump.pcap
+
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"
 date

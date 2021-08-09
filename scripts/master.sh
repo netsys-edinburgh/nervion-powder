@@ -58,6 +58,11 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 sudo apt-get -y install kubelet kubeadm kubectl kubernetes-cni golang-go jq
 
 sudo docker version
+
+# Solving issues with cgroup-drivers
+echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
+sudo systemctl restart docker
+
 sudo swapoff -a
 sudo kubeadm init --config=config/kubeadm-config.yaml -v=5
 

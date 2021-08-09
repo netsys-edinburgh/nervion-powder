@@ -56,6 +56,10 @@ sudo apt-get -y install kubelet kubeadm kubectl kubernetes-cni golang-go jq
 sudo docker version
 sudo swapoff -a
 
+# Solving issues with cgroup-drivers
+echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
+sudo systemctl restart docker
+
 # use geni-get for shared rsa key
 # see http://docs.powderwireless.net/advanced-topics.html
 geni-get key > ${HOME}/.ssh/id_rsa

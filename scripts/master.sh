@@ -59,7 +59,7 @@ sudo apt-get -y install kubelet kubeadm kubectl kubernetes-cni golang-go jq
 
 sudo docker version
 sudo swapoff -a
-sudo kubeadm init --config=config/kubeadm-config.yaml
+sudo kubeadm init --config=config/kubeadm-config.yaml -v=5
 
 # result will be like:  kubeadm join 155.98.36.111:6443 --token i0peso.pzk3vriw1iz06ruj --discovery-token-ca-cert-hash sha256:19c5fdee6189106f9cb5b622872fe4ac378f275a9d2d2b6de936848215847b98
 

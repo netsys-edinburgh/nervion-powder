@@ -57,8 +57,8 @@ sudo docker version
 sudo swapoff -a
 
 # Solving issues with cgroup-drivers
-echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
-sudo systemctl restart docker
+#echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
+#sudo systemctl restart docker
 
 # use geni-get for shared rsa key
 # see http://docs.powderwireless.net/advanced-topics.html

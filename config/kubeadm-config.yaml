@@ -9,7 +9,3 @@ apiServer:
     service-node-port-range: 30000-39000
 networking:
   podSubnet: "10.244.0.0/16"
----
-kind: KubeletConfiguration
-apiVersion: kubelet.config.k8s.io/v1beta1
-cgroupDriver: cgroupfs

@@ -86,6 +86,9 @@ export PATH=$PATH:$GOPATH/bin
 sudo go get -u github.com/containernetworking/plugins/plugins/ipam/static
 sudo go build -o /opt/cni/bin/static github.com/containernetworking/plugins/plugins/ipam/static
 
+# install a crontab to permanently save all Nervion logs
+crontab -l | { cat; echo "* * * * * /local/repository/config/test/savelogs.py"; } | crontab -
+
 # Log all the traffic on the Nervion slave node
 sudo tcpdump -i any -w ~/tcpdump.pcap &
 

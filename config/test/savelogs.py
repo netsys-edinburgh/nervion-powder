@@ -26,12 +26,12 @@ def log(msg):
 
 
 def getLogFiles():
-    logFiles = [file for file in os.listdir(ORIGINAL_LOG_DIR) if file.startswith("corekube") and file.endswith(".log")]
+    logFiles = [file for file in os.listdir(ORIGINAL_LOG_DIR) if file.endswith(".log")]
     return logFiles
 
 
 def getRunningLogFiles():
-    logFiles = [file for file in os.listdir(OUTPUT_LOG_DIR) if file.startswith("corekube") and file.endswith(".log")]
+    logFiles = [file for file in os.listdir(OUTPUT_LOG_DIR) if file.endswith(".log")]
     return logFiles
 
 

@@ -35,6 +35,8 @@ cd open5gs/
 meson build --prefix=`pwd`/install
 ninja -C build
 
+sudo ldconfig
+
 echo "Installing Open5GS..."
 cd build
 ninja install
@@ -47,7 +49,4 @@ do
 	~/open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
 done
 
-cp /local/repository/config/open5gs/sample.yaml ~/open5gs/build/configs/sample.yaml
-
-
-sudo ./open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml
+sudo ~/open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml

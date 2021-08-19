@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exit 0
+
 echo "Installing Open5GS"
 sudo apt update
 sudo apt -y install software-properties-common

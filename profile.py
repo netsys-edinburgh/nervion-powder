@@ -123,9 +123,11 @@ elif params.EPC == "free5GC":
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 elif params.EPC == "Test":
     rspec = PG.Request()
-    ck_master = rspec.XenVM('masterck')
-    ck_master.cores = 4
-    ck_master.ram = 1024 * 8
+    #ck_master = rspec.XenVM('masterck')
+    #ck_master.cores = 4
+    #ck_master.ram = 1024 * 8
+    ck_master = rspec.RawPC("masterck")
+    ck_master.hardware_type = params.Hardware
     ck_master.routable_control_ip = True
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     ck_master.Site('CK')
@@ -155,9 +157,11 @@ else:
 # CK Slaves
 if params.EPC == 'Test':
     for i in range(0,params.ck_nodes):
-        ck_s = rspec.XenVM('ck_slave'+str(i))
-        ck_s.cores = int(params.cores)
-        ck_s.ram = 1024 * int(params.ram)
+        #ck_s = rspec.XenVM('ck_slave'+str(i))
+        #ck_s.cores = int(params.cores)
+        #ck_s.ram = 1024 * int(params.ram)
+        ck_s = rspec.RawPC('ck_slave'+str(i))
+        ck_s.hardware_type = params.Hardware
         ck_s.routable_control_ip = True
         ck_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
         ck_s.Site('CK')

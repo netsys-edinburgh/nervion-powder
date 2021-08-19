@@ -5,10 +5,17 @@ echo "Updating repositories..."
 sudo apt -y update
 
 # Install MongoDB
-echo "INstalling MongoDB..."
+echo "Installing MongoDB..."
 sudo apt -y install mongodb
 sudo systemctl start mongodb
 sudo systemctl enable mongodb
+
+# Configure TUN interface
+echo "Configuring TUN interface..."
+sudo ip tuntap add name ogstun mode tun
+sudo ip addr add 10.45.0.1/16 dev ogstun
+sudo ip addr add 2001:230:cafe::1/48 dev ogstun
+sudo ip link set ogstun up
 
 # Install dependencies
 echo "Installing dependencies..."
@@ -28,19 +35,19 @@ cd open5gs/
 meson build --prefix=`pwd`/install
 ninja -C build
 
-# Configure TUN interface
-echo "Configuring TUN interface..."
-sudo ip tuntap add name ogstun mode tun
-sudo ip addr add 10.45.0.1/16 dev ogstun
-sudo ip addr add 2001:230:cafe::1/48 dev ogstun
-sudo ip link set ogstun up
+echo "Installing Open5GS..."
+cd build
+ninja install
+cd ../
 
 echo "Adding subscribers to the DB..."
 for i in $(seq -f "%010g" 1 10)
 do
 	echo "UE: 20893$i"
-	open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
+	~/open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
 done
+
+cp /local/repository/config/open5gs/sample.yaml ~/open5gs/build/configs/sample.yaml
 
 
 sudo ./open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml

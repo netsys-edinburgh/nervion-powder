@@ -13,7 +13,7 @@ sudo systemctl enable mongodb
 # Configure TUN interface
 echo "Configuring TUN interface..."
 sudo ip tuntap add name ogstun mode tun
-sudo ip addr add 10.45.0.1/16 dev ogstun
+sudo ip addr add 172.16.0.1/16 dev ogstun
 sudo ip addr add 2001:230:cafe::1/48 dev ogstun
 sudo ip link set ogstun up
 

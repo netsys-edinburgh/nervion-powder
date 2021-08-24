@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: corekube-worker
-        image: andrewferguson/corekube-worker:latest
+        image: andrewferguson/corekube5g-worker:latest
         ports:
         - containerPort: 5566
           protocol: UDP
@@ -140,7 +140,7 @@ spec:
         ports:
         - containerPort: 36412
           protocol: SCTP
-        command: ["./corekube_frontend", "$(THIS_POD_IP)", "$(COREKUBE_WORKER_SERVICE_HOST)", "4G"]
+        command: ["./corekube_frontend", "$(THIS_POD_IP)", "$(COREKUBE_WORKER_SERVICE_HOST)", "5G"]
         env:
         - name: THIS_POD_IP
           valueFrom:

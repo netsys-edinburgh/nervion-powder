@@ -81,6 +81,8 @@ pc.defineParameter("ram", "RAM size",
                    advanced=True)
 pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
                    portal.ParameterType.INTEGER, 1, advanced=True)
+pc.defineParameter("ck_version", "Test Core version",
+                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], advanced=True)
 
 
 params = pc.bindParameters()
@@ -131,7 +133,10 @@ elif params.EPC == "Test":
     ck_master.routable_control_ip = True
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     ck_master.Site('CK')
-    ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
+    if params.ck_version == '4G':
+        ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
+    else:
+        ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_5g_master.sh"))
 
 
 tour = IG.Tour()

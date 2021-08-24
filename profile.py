@@ -82,7 +82,7 @@ pc.defineParameter("ram", "RAM size",
 pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
                    portal.ParameterType.INTEGER, 1, advanced=True)
 pc.defineParameter("ck_version", "Test Core version",
-                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], advanced=True)
+                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], longDescription='Test Core 4G or 5G', advanced=True)
 
 
 params = pc.bindParameters()

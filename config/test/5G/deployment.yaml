@@ -111,9 +111,9 @@ metadata:
   name: corekube-frontend
 spec:
   ports:
-  - port: 36412
-    targetPort: 36412
-    nodePort: 36412
+  - port: 38412
+    targetPort: 38412
+    nodePort: 38412
     protocol: SCTP
   selector:
     app: corekube-frontend
@@ -138,7 +138,7 @@ spec:
         image: andrewferguson/corekube-frontend:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 36412
+        - containerPort: 38412
           protocol: SCTP
         command: ["./corekube_frontend", "$(THIS_POD_IP)", "$(COREKUBE_WORKER_SERVICE_HOST)", "5G"]
         env:

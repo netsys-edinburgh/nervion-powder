@@ -32,17 +32,17 @@ spec:
         - containerPort: 5566
           protocol: UDP
           name: worker-s1ap
-        command: ["./corekube_udp_worker", "$(THIS_POD_IP)", "$(COREKUBE_DB_SERVICE_HOST)", "0"]
+        command: ["./corekube_udp_worker", "$(THIS_POD_IP)", "$(COREKUBE_DB_SERVICE_HOST)", "1"]
         env:
         - name: THIS_POD_IP
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        resources:
-          limits:
-            cpu: 5m
-          requests:
-            cpu: 2m
+#        resources:
+#          limits:
+#            cpu: 5m
+#          requests:
+#            cpu: 2m
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -53,8 +53,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: corekube-worker
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: 2
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
 
 

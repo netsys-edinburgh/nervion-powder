@@ -66,7 +66,7 @@ pc = portal.Context()
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
 pc.defineParameter("EPC", "EPC implementation",
-                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test")])
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test"), ('Empty','Empty')])
 pc.defineParameter("Hardware", "EPC hardware",
                    portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
@@ -137,6 +137,10 @@ elif params.EPC == "Test":
         ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
     else:
         ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_5g_master.sh"))
+elif params.EPC == "Empty":
+    rspec = PG.Request()
+    epc = rspec.RawPC("core")
+    epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 
 
 tour = IG.Tour()

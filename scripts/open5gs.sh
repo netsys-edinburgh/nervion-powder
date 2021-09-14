@@ -21,7 +21,7 @@ sudo ip link set ogstun up
 echo "Installing dependencies..."
 sudo apt -y install python3-pip python3-setuptools python3-wheel ninja-build build-essential flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev libnghttp2-dev libmicrohttpd-dev libcurl4-gnutls-dev libnghttp2-dev libtins-dev meson software-properties-common unzip
 
-cd ~
+cd /local/repository/
 
 # Download Open5GS 2.1.7
 echo "Cloning Open5GS v2.1.7..."
@@ -46,7 +46,7 @@ echo "Adding subscribers to the DB..."
 for i in $(seq -f "%010g" 1 1500)
 do
 	echo "UE: 20893$i"
-	~/open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
+	/local/repository/open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
 done
 
-sudo ~/open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml &
+sudo /local/repository/open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml &

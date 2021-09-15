@@ -89,7 +89,7 @@ sudo go build -o /opt/cni/bin/static github.com/containernetworking/plugins/plug
 crontab -l | { cat; echo "* * * * * /local/repository/config/test/savelogs.py"; } | crontab -
 
 # Log all the traffic on the CK slave nodes
-sudo tcpdump -i any -w ~/tcpdump.pcap &
+#sudo tcpdump -i any -w ~/tcpdump.pcap &
 
 echo "Setup DONE!"
 date

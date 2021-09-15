@@ -148,7 +148,7 @@ sudo kubectl create -f config/test/deployment.yaml
 config/test/loghpa.sh &
 
 # Log all the traffic on the CK master node
-sudo tcpdump -i any -w ~/tcpdump.pcap &
+#sudo tcpdump -i any -w ~/tcpdump.pcap &
 
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"

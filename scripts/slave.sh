@@ -90,7 +90,7 @@ sudo go build -o /opt/cni/bin/static github.com/containernetworking/plugins/plug
 crontab -l | { cat; echo "* * * * * /local/repository/config/test/savelogs.py"; } | crontab -
 
 # Log all the traffic on the Nervion slave node
-sudo tcpdump -i any -w ~/tcpdump.pcap &
+#sudo tcpdump -i any -w ~/tcpdump.pcap &
 
 # if it complains that "[ERROR Port-10250]: Port 10250 is in use", kill the process.
 # if it complains some file already exist, remove those. [ERROR FileAvailable--etc-kubernetes-pki-ca.crt]: /etc/kubernetes/pki/ca.crt already exists

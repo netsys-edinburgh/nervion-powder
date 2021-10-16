@@ -1,0 +1,25 @@
+{
+	"enbs":
+	[
+		{
+			"enb_num": 1,
+			"enb_id": 14680064,
+			"enb_mcc": "208",
+			"enb_mnc": "93"
+		}
+	],
+	"ues":
+	[
+		{
+			"ue_id": 1,
+			"ue_mcc": "208",
+			"ue_mnc": "93",
+			"ue_msin": "0000000001",
+			"ue_key": "0x3f3f473f2f3fd0943f3f3f3f097c6862",
+			"ue_op_key": "0xe9be7fb89bb01978e67972ca8580079e",
+			"control_plane": "init-4-detach-8-attach-4",
+			"traffic_command": "ping -I {TUN} 172.16.0.1",
+			"enb": 1
+		}
+	]
+}

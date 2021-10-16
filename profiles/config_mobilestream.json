@@ -1,0 +1,25 @@
+{
+	"enbs":
+	[
+		{
+			"enb_num": 1,
+			"enb_id": 14680064,
+			"enb_mcc": "998",
+			"enb_mnc": "98"
+		}
+	],
+	"ues":
+	[
+		{
+			"ue_id": 1,
+			"ue_mcc": "998",
+			"ue_mnc": "98",
+			"ue_msin": "1000000001",
+			"ue_key": "0x00000000000000000000000000000000",
+			"ue_op_key": "0x66e94bd4ef8a2c3b884cfa59ca342b2e",
+			"control_plane": "init-inf",
+			"traffic_command": "sleep 10000",
+			"enb": 1
+		}
+	]
+}

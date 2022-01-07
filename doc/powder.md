@@ -1,9 +1,3 @@
----
-layout: page
-title: Nervion in Powder
-navigation: 2
----
-
 # Powder Profile Overview
 
 Nervion has been integrated with the [Powder Platform](https://powderwireless.net/). Here you will find a complete guide on how to set up Nervion in Powder using the official [Nervion Powder profile](https://github.com/j0lama/nervion-powder).
@@ -16,7 +10,7 @@ In order to use Nervion, you first need to log in [Powder](https://www.powderwir
 
 Now you have to configure some parameters of the Nervion setup in the Parameterize window:
 
-![Nervion Parameters configuration](/images/parameters.png)
+![Nervion Parameters configuration](/doc/images/parameters.png)
 
 The parameters you can configure in that window are the following:
 
@@ -29,7 +23,7 @@ The parameters you can configure in that window are the following:
 
 Once you're done with the parameters, you have to click on "Next" to proceed with the instantiation. Now you need to select the name of the experiment and the CLuster location for Nervion and the Core. You can use the same values used in the image below. 
 
-![Experiment General configuration](/images/parameters2.png)
+![Experiment General configuration](/doc/images/parameters2.png)
 
 After configuring the name and locations of the experiment, you have to click on "Next" to proceed to the final step (Scheduling). Unless you need to extend the experiment or schedule it in a specific time frame, you can finalize the instantiation by clicking on "Finish".
 
@@ -41,7 +35,7 @@ Once the experiment is ready, you can ssh all the VMs and machines that are used
 
 Each experiment must have one machine that corresponds with the core and one machine named "master" that corresponds with the master node of the Kubernetes cluster used by Nervion. If the Multiplexer parameter has been selected during the instantiation, another machine named "multiplexer" would be in the list. Finally, there is a set of slave machines that correspond with the number of nodes for the cluster that you have selected during the instantiation. The image below shows the List View of an experiment with the multiplexer and only one slave node:
 
-![1-node Nervion experiment](/images/ssh.png)
+![1-node Nervion experiment](/doc/images/ssh.png)
 
 Installing Kubernetes in the master node and the slave nodes and deploying Nervion takes some time (5-10 mins). You can check the state of the installation in the masternode or in any slave node by ssh'ing the desired machine and running the following command:
 ```bash
@@ -54,7 +48,7 @@ kubectl get services
 ```
 If Nervion is ready, the output of the command above should be similar to this:
 
-![kubectl command output](/images/kubectl.png)
+![kubectl command output](/doc/images/kubectl.png)
 
 #### Running the core
 
@@ -101,7 +95,7 @@ Once the sellected core is running, you can open a new ssh session and run *tcpd
 
 At this point, Nervion should be ready in the Kubernetes cluster, and the core should be running in the core machine. In order to configure Nervion, you need to access the Nervion Controller Web Interface. The Web Interface can be accessed through the master node URL on port 34567. The master node URL can be obtained from the master node SSH command (the part after the @). In the example shown above, the Web Interface can be accessed at ***pcvm606-2.emulab.net:34567***. The Nervion Controler Web Interface looks like this:
 
-![Nervion Controller Web Interface](/images/nervion_controller.png)
+![Nervion Controller Web Interface](/doc/images/nervion_controller.png)
 
 In this Powder profile, every core network uses the IP ***192.168.4.80*** (even the empty machine), so the field "MME/AMF IP Address" has to be filled with that IP. You can use a different IP if your core network is not deployed in Powder. Like the core machine, the multiplexer machine always uses the same IP (***192.168.4.81***).
 
@@ -124,7 +118,7 @@ The latest parameter that can be configured is the refresh time of the web inter
 
 Once all the parameters have been configured, click on "Submit" to start the experiment. The experiment screen shows the state of every UE and eNB with some of the parameters specified in the Nervion configuration file, and it looks like this:
 
-![Experiment screen](/images/nervion_experiment.png)
+![Experiment screen](/doc/images/nervion_experiment.png)
 
 You can restart the experiment at any time by clicking on "Restart". This action will redirect you back to the configuration screen, and all the pods (UEs and eNBs) will be deleted.
 

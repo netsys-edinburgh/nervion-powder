@@ -1,9 +1,3 @@
----
-layout: page
-title: Nervion Profiles
-navigation: 3
----
-
 # Nervion Profiles
 
 A Nervion profile, is a JSON file that specifies the entire RAN architecture and the behaviour of the UEs that are part of it. The structure of a Nervion profile is exactly the same independetnly of the core network used (4G or 5G).
@@ -61,7 +55,7 @@ Note that *enb* in the profile indifferently refers to eNB and gNB.
 ## How to specify Control Plane actions
 
 The **control_plane** command is a string that defines actions in the following finite state machine (FSM). The Control Plane FSM represents the different states on which a UE can be and the control plane actions that can be taken:
-![Control Plane state machine](/images/state_machine.png)
+![Control Plane state machine](/doc/images/state_machine.png)
 
 The control-plane behaviour description language is a string of tuples. Each tuple has two elements: the action and the delay time. The action has to be one of the transitions in the FSM and the delay time has to be a positive integer, zero or the, '*inf*' string that represents the number of seconds that the UE is going to stay in the state result of that action; however, there are some actions that require some extra information, such as Handover procedures and attaching to another eNB. For those cases, the eNB ID has to be concatenated with the action. The character '*-*' (dash) is used as a separator between actions and delay times.
 

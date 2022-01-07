@@ -48,5 +48,3 @@ do
 	echo "UE: 20893$i"
 	/local/repository/open5gs/misc/db/open5gs-dbctl add 20893$i 465B5CE8B199B49FAA5F0A2EE238A6BC E8ED289DEBA952E4283B54E88E6183CA
 done
-
-sudo /local/repository/open5gs/build/tests/app/5gc -c /local/repository/config/open5gs/sample.yaml &

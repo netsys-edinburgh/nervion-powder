@@ -120,7 +120,7 @@ elif params.EPC == "Open5GS":
     rspec = PG.Request()
     epc = rspec.RawPC("epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/open5gs.sh"))
+    epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/open5gs_setup.sh"))
 elif params.EPC == "free5GC":
     rspec = PG.Request()
     epc = rspec.RawPC("epc")

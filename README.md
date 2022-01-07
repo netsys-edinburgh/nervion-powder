@@ -11,5 +11,6 @@ A complete how-to guide of Nervion in Powder can be found [here](/doc/powder.md)
 
 # Access the source code
 
-The source code of the Nervion's Powder profile is accessible [here](https://github.com/j0lama/nervion-powder).
+This repository contains the source code of the Nervion's Powder profile.
+
 If you want access to the source code of Nervion, please, send an email to *jon.larrea@ed.ac.uk*.

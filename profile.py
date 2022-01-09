@@ -2,11 +2,11 @@
 
 kube_description= \
 """
-Emulator demo
+Nervion's Powder profile
 """
 kube_instruction= \
 """
-Not instructions yet
+Find a complete how-to guide here: https://github.com/j0lama/nervion-powder/blob/master/README.md
 """
 
 #

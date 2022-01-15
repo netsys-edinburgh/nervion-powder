@@ -1,10 +1,10 @@
 # Nervion Scenarios
 
-A Nervion scenario is a JSON file that specifies the entire RAN scenario to be emulated and the behavior of the UEs that are part of it. The structure of a Nervion scenario is independent of the core network used (4G or 5G).
+A Nervion scenario, is a JSON file that specifies the entire RAN architecture and the behaviour of the UEs that are part of it. The structure of a Nervion scenario is exactly the same independetnly of the core network used (4G or 5G).
 
-## What a Nervion profile looks like?
+## What a Nervion scenario looks like?
 
-Every Nervion profile looks like this:
+Every Nervion scenario looks like this:
 
 ```yaml
 {
@@ -34,9 +34,9 @@ Every Nervion profile looks like this:
 }
 ```
 
-Each Nervion profile has two main objects: "enbs" (List of eNBs) and "ues" (List of UEs). 
+Each Nervion scenario has two main objects: "enbs" (List of eNBs) and "ues" (List of UEs). 
 The eNB list ("enbs") can contains any number of eNB objects each of them containing the following 4 mandatory fields:
-- **enb_num**: Number of the eNB in the profile (This field is used by the UEs to differentiate between eNBs and has to be *unique*)
+- **enb_num**: Number of the eNB in the scenario (This field is used by the UEs to differentiate between eNBs and has to be *unique*)
 - **enb_mcc**: Mobile Country Code (e.g. enb_mcc: "208")
 - **enb_mnc**: Mobile Network Code (e.g. enb_mnc: "93")
 
@@ -50,7 +50,7 @@ Similarly to the eNBs list, the UEs list contains a list of UE objects each of t
 - **traffic_command**: Bash command with the tool that generates traffic (e.g. traffic_command: ping -I {TUN} 8.8.8.8). This command is executed only when the UE is attached to the network.
 - **enb**: Number of the eNB that is going to be the initial serving eNB.
 
-Note that *enb* in the profile indifferently refers to eNB and gNB.
+Note that *enb* in the scenario indifferently refers to eNB and gNB.
 
 ## How to specify Control Plane actions
 

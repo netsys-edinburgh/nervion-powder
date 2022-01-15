@@ -1,6 +1,6 @@
 # Nervion Scenarios
 
-A Nervion scenario, is a JSON file that specifies the entire RAN architecture and the behaviour of the UEs that are part of it. The structure of a Nervion scenario is exactly the same independetnly of the core network used (4G or 5G).
+A Nervion scenario is a JSON file that specifies the entire RAN architecture to be emulated and the behavior of the UEs that are part of it. The structure of a Nervion scenario is independent of the core network used (4G or 5G).
 
 ## What a Nervion scenario looks like?
 
@@ -46,11 +46,11 @@ Similarly to the eNBs list, the UEs list contains a list of UE objects each of t
 - **ue_msin**: 10-digit string that uniquely identifies a UE in the core (e.g. ue_msin: "0000000001")
 - **ue_key**: 16-byte string UE key (e.g. ue_key: "0x00000000000000000000000000000000")
 - **ue_op_key**: 16-byte string Operator's key (e.g. ue_op_key: "0x00112233445566778899AABBCCDDEEFF")
-- **control_plane**: Control plane command that defines the behaviour of the UE (More details about this bellow)
+- **control_plane**: Control plane command that defines the behavior of the UE (More details about this bellow)
 - **traffic_command**: Bash command with the tool that generates traffic (e.g. traffic_command: ping -I {TUN} 8.8.8.8). This command is executed only when the UE is attached to the network.
 - **enb**: Number of the eNB that is going to be the initial serving eNB.
 
-Note that *enb* in the scenario indifferently refers to eNB and gNB.
+Note that *enb* in the scenario can refer to either eNB or gNB as appropriate for the emulation scenario.
 
 ## How to specify Control Plane actions
 

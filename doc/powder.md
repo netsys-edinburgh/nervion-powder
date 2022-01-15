@@ -69,7 +69,7 @@ sudo bash setup_mobilestream.sh
 cd /opt/mobilestream-conext/mobilestreamconext/MobileStream-Java/
 sudo bash run-stateless-control-plane.sh 1 2
 ```
-If you have any problem with MobileStream, please, refer to the [original profile](https://gitlab.flux.utah.edu/junguk/mobilestream-profile).
+If you have any problem with MobileStream, please refer to its [original profile](https://gitlab.flux.utah.edu/junguk/mobilestream-profile).
 
 To deploy Free5GC, you will need to run two scripts. The first command will install a custom kernel and the core machine will be rebooted. Then you will need to run the second script.
 ```bash
@@ -89,7 +89,7 @@ cd /local/repository/scripts/
 sudo ./open5gs_run.sh
 ```
 
-Once the sellected core is running, you can open a new ssh session and run *tcpdump* to get the traffic.
+Once the selected core is running, you can open a new ssh session and run *tcpdump* to get the traffic.
 
 #### Running Nervion
 

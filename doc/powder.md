@@ -52,7 +52,7 @@ If Nervion is ready, the output of the command above should be similar to this:
 
 #### Running the core
 
-Once the Nervion is ready, it is time to configure the core network before starting the experiment in Nervion. As mentioned above, this Powder profile contains 6 different core networks that are ready to be used with Nervion ([OAI](https://openairinterface.org/), [srsEPC](https://docs.srslte.com/en/rfsoc/index.html), [NextEPC](https://nextepc.org/), [MobileStream](https://www.flux.utah.edu/paper/277), [Free5GC](https://www.free5gc.org/), and [Open5GS](https://open5gs.org/)). Two of them are automatically deploy when the core machine boots the first time (srsEPC, NextEPC); however, Oai, MobileStream, Free5GC, and Open5GS require the user to manually run some commands to deploy them. You can check if the core is running by listing the process with *ps -ax*.
+Once the Nervion is ready, it is time to configure the core network before starting the experiment. As mentioned before, this Powder profile contains 6 different core networks that are ready to be evaluated with Nervion ([OAI](https://openairinterface.org/), [srsEPC](https://docs.srslte.com/en/rfsoc/index.html), [NextEPC](https://nextepc.org/), [MobileStream](https://www.flux.utah.edu/paper/277), [Free5GC](https://www.free5gc.org/), and [Open5GS](https://open5gs.org/)). Two of them -- srsEPC and NextEPC -- are automatically deployed when the core machine boots the first time; however, OAI, MobileStream, Free5GC, and Open5GS require the user to manually run some commands to deploy them. You can check if the core is running by listing the process with *ps -ax*.
 
 To run OAI Core Network run the following commands:
 ```bash

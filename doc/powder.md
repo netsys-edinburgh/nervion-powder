@@ -101,7 +101,7 @@ In this Powder profile, every core network uses the IP ***192.168.4.80*** (even 
 
 The Control-Plane Mode provides better scalability by disabling the Data-Plane. If this mode is enabled, each UE instance is no longer for a single UE but can emulate multiple UEs using multi-threading. By default, the number of threads per UE is 100, but this value can be modified through the Web Interface.
 
-The Nervion configuration file (in JSON format) is where the RAN architecture and behavior are specified. A complete guide on the Configuration files can be found [here](/doc/profiles.md). Each of the core networks provided in this profile has its own peculiarities in terms of encryptions keys and MCC/MNC; therefore, we provide a basic configuration file for each core. Each example executes a single UE with one eNB/gNB. These files can be modified following the [Nervion profiles guide](/doc/profiles.md).
+The Nervion configuration file (in JSON format) is where the RAN architecture and behavior are specified. A complete guide on the Configuration files can be found [here](/doc/scenarios.md). Each of the core networks provided in this profile has its own peculiarities in terms of encryptions keys and MCC/MNC; therefore, we provide a basic configuration file for each core. Each example executes a single UE with one eNB/gNB. These files can be modified following the [Nervion scenarios guide](/doc/scenarios.md).
 
 - [OAI](https://github.com/j0lama/nervion-powder/blob/master/profiles/config_oai.json)
 - [srsEPC](https://github.com/j0lama/nervion-powder/blob/master/profiles/config_srsepc.json)

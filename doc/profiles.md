@@ -1,6 +1,6 @@
-# Nervion Profiles
+# Nervion Scenarios
 
-A Nervion profile, is a JSON file that specifies the entire RAN architecture and the behaviour of the UEs that are part of it. The structure of a Nervion profile is exactly the same independetnly of the core network used (4G or 5G).
+A Nervion scenario is a JSON file that specifies the entire RAN scenario to be emulated and the behavior of the UEs that are part of it. The structure of a Nervion scenario is independent of the core network used (4G or 5G).
 
 ## What a Nervion profile looks like?
 

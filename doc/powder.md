@@ -1,8 +1,8 @@
-# Powder Profile Overview
+# Nervion Powder Profile Overview
 
-Nervion has been integrated with the [Powder Platform](https://powderwireless.net/). Here you will find a complete guide on how to set up Nervion in Powder using the official [Nervion Powder profile](https://github.com/j0lama/nervion-powder).
+Nervion is integrated with the [Powder Platform](https://powderwireless.net/). Here you will find a detailed guide on how to set up Nervion on Powder using the official [Nervion Powder Profile](https://github.com/j0lama/nervion-powder).
 
-For any issues with Nervion in Powder or suggestions, you can contact us at jon.larrea@ed.ac.uk or by the issues section in the [Nervion Powder profile repository](https://github.com/j0lama/nervion-powder).
+For any issues with Nervion on Powder or suggestions, you can contact us at jon.larrea@ed.ac.uk or via the issues section in the [Nervion Powder Profile repository](https://github.com/j0lama/nervion-powder).
 
 # Profile Instantiation
 

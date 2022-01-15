@@ -1,16 +1,15 @@
-# Nervion
+# Nervion: A Cloud Native RAN Emulator for Scalable and Flexible Mobile Core Evaluation
 
-Nervion is the name given to a RAN emulator that implements a novel cloud-based architecture to perform large-scale evaluations of core networks. Nervion allows the emulation of any RAN architecture through a configuration file in which the user can specify the control-plane behaviour and data-plane traffic of every UE that is part of such RAN architecture. 
+Nervion is a cloud-native RAN emulator designed to perform large-scale mobile core network evaluations. Nervion provides maximum flexibility by allowing the emulation of virtually any RAN scenario along with the customization of the control and data plane workload of every emulated UE. Nervion leverages Kubernetes as an orchestrator not only to ease use of multiple machines (in a cluster) to emulate tens of thousands of UEs but also to provide portability (i.e., it can be deployed in any Kubernetes cluster). We have developed a prototype implementation of Nervion that can be used to evaluate standard-compliant 4G and 5G core networks.
 
-For more details about the architecture of Nervion, you will find useful the paper published at [MobiCom 21](https://www.sigmobile.org/mobicom/2021/index.html) titled: [*Nervion: A Cloud Native RAN Emulator for Scalable and Flexible Mobile Core Evaluation*](https://dl.acm.org/doi/abs/10.1145/3447993.3483248).
+For more details about the Nervion system, please refer to the [*Nervion Paper*](https://www.research.ed.ac.uk/en/publications/nervion-a-cloud-native-ran-emulator-for-scalable-and-flexible-mob) published in [ACM MobiCom'21](https://www.sigmobile.org/mobicom/2021/index.html).
 
-# Nervion Powder profile
+# Nervion Powder Profile
 
-Nervion is currently accessible through the [Powder platform](https://powderwireless.net/). We have published a Powder profile in which Nervion can be deployed with six different core networks.
-A complete how-to guide of Nervion in Powder can be found [here](/doc/powder.md).
+Nervion is currently accessible through the [Powder platform](https://powderwireless.net/). We have published a Powder Profile that allows evaluating six different target core network implementations with Nervion. A detailed how-to guide of using Nervion over Powder can be found [here](/doc/powder.md).
 
-# Access the source code
+# Source Code
 
-This repository contains the source code of the Nervion's Powder profile.
+This repository contains the source code of the Nervion's Powder Profile released under the MIT license.
 
-If you want access to the source code of Nervion, please, send an email to *jon.larrea@ed.ac.uk*.
+Source code of Nervion will also be made available upon request. For getting access to it, please contact *jon.larrea@ed.ac.uk*.

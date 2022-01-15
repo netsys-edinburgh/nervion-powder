@@ -37,7 +37,7 @@ Each experiment must have one machine for the core and one machine named "master
 
 ![1-node Nervion experiment](/doc/images/ssh.png)
 
-Installing Kubernetes in the master node and the slave nodes, and deploying Nervion takes some time (5-10 mins). You can check the state of the installation in the master node or in any slave node by ssh'ing the desired machine and running the following command:
+Installing Kubernetes in the master node and the slave nodes, and deploying Nervion takes some time (5-10 mins). You can check the state of the installation in the master node or in any slave node by ssh'ing to the desired machine and running the following command:
 ```bash
 cat /local/repository/deploy.log
 ```

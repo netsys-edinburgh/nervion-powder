@@ -97,11 +97,11 @@ At this point, Nervion should be ready in the Kubernetes cluster, and the core s
 
 ![Nervion Controller Web Interface](/doc/images/nervion_controller.png)
 
-In this Powder profile, every core network uses the IP ***192.168.4.80*** (even the empty machine), so the field "MME/AMF IP Address" has to be filled with that IP. You can use a different IP if your core network is not deployed in Powder. Like the core machine, the multiplexer machine always uses the same IP (***192.168.4.81***).
+In this Powder profile, every core network uses the IP ***192.168.4.80*** (even the empty machine), so the field "MME/AMF IP Address" has to be filled with that IP. You can use a different IP if your core network is not deployed on Powder. Like the core machine, the multiplexer machine always uses the same IP: ***192.168.4.81***.
 
-The Control-Plane Mode provides better scalability by disabling the Data-Plane. If this mode is enabled, each UE is no longer a single UE and can reproduce multiple UEs using multi-threading. By default, the number of threads per UE is 100, but this value can be modified through the Web Interface.
+The Control-Plane Mode provides better scalability by disabling the Data-Plane. If this mode is enabled, each UE instance is no longer for a single UE but can emulate multiple UEs using multi-threading. By default, the number of threads per UE is 100, but this value can be modified through the Web Interface.
 
-The Nervion configuration file (JSON format) is where the RAN architecture and behaviour are specified. A complete guide on the Configuration files can be found [here](/profiles.md). Each of the core networks provided in this profile has its own peculiarities in terms of encryptions keys and MMC/MNC; therefore, we provide a basic configuration file for each core. Each example executes a single UE with one eNB/gNB. These files can be modified following the [Nervion profiles guide](/profiles.md).
+The Nervion configuration file (in JSON format) is where the RAN architecture and behavior are specified. A complete guide on the Configuration files can be found [here](/profiles.md). Each of the core networks provided in this profile has its own peculiarities in terms of encryptions keys and MCC/MNC; therefore, we provide a basic configuration file for each core. Each example executes a single UE with one eNB/gNB. These files can be modified following the [Nervion profiles guide](/profiles.md).
 
 - [OAI](https://github.com/j0lama/nervion-powder/blob/master/profiles/config_oai.json)
 - [srsEPC](https://github.com/j0lama/nervion-powder/blob/master/profiles/config_srsepc.json)
@@ -114,7 +114,7 @@ Nervion has been containerized in a Docker image with a set of traffic generator
 - **Nervion 4G**: j0lama/ran_slave:latest ([Link](https://hub.docker.com/repository/docker/j0lama/ran_slave))
 - **Nervion 5G**: j0lama/ran_slave_5g:latest ([Link](https://hub.docker.com/repository/docker/j0lama/ran_slave_5g))
 
-The latest parameter that can be configured is the refresh time of the web interface that will show the status of each UE and each eNB.
+The last parameter that can be configured is the refresh time of the web interface that will show the status of each UE and each eNB.
 
 Once all the parameters have been configured, click on "Submit" to start the experiment. The experiment screen shows the state of every UE and eNB with some of the parameters specified in the Nervion configuration file, and it looks like this:
 

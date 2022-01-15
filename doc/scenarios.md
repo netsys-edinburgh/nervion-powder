@@ -57,7 +57,7 @@ Note that *enb* in the scenario can refer to either eNB or gNB as appropriate fo
 The **control_plane** command is a string that defines actions in the following finite state machine (FSM). The Control Plane FSM represents the different states on which a UE can be and the control plane actions that can be taken:
 ![Control Plane state machine](/doc/images/state_machine.png)
 
-The control-plane behaviour description language is a string of tuples. Each tuple has two elements: the action and the delay time. The action has to be one of the transitions in the FSM and the delay time has to be a positive integer, zero or the, '*inf*' string that represents the number of seconds that the UE is going to stay in the state result of that action; however, there are some actions that require some extra information, such as Handover procedures and attaching to another eNB. For those cases, the eNB ID has to be concatenated with the action. The character '*-*' (dash) is used as a separator between actions and delay times.
+The control-plane behavior description language is a string of tuples. Each tuple has two elements: the action and the delay time. The action has to be one of the transitions in the FSM and the delay time has to be a positive integer, zero or the, '*inf*' string that represents the number of seconds that the UE is going to stay in the state result of that action; however, there are some actions that require some extra information, such as Handover procedures and attaching to another eNB. For those cases, the eNB ID has to be concatenated with the action. The character '*-*' (dash) is used as a separator between actions and delay times.
 
 Every **control_plane** command has to start with the action '*init*' which performs the initial attach event with the eNB defined in the '*enb*' field defined for that UE. Another mandatory rule is that the **control_plane** command has to finish with an '*inf*' delay time or in the *Attached/Traffic* state. This is because the **control_plane** command is executed in a loop so the only way of finishing is by staying in a state for an infinite amount of time or by going back to the initial state (Attach/Traffic) to start the actions again from there. Note that the control plane actions have to be coherent with the FSM diagram (e.g. UE cannot go to Idle state from the Detached state).
 
@@ -77,6 +77,6 @@ The 4G version of Nervion currently supports the following actions: init, detach
 
 Some useful **control_plane** command examples:
 - **init-inf**: Attach the UE and remains attached until the end of the experiment.
-- **init-10-detach-inf**: Attach the UE during 10 seconds and then detach the UE.
+- **init-10-detach-inf**: Attach the UE for 10 seconds and then detach the UE.
 - **init-15-detach-30-attach-15**: The UE attaches to the core for 15 seconds. Then it detaches from the network for 30 seconds. And finally it attaches again for another 15 seconds and the actions start again.
-- **init-0-detach-0-attach-0**: Attach and Detach from the core as quick as possible in an infinite loop (This is used to generate high loads).
+- **init-0-detach-0-attach-0**: Attach and Detach from the core as fast as possible in an infinite loop (This is used to generate high loads).

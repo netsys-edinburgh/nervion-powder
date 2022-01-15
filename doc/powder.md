@@ -12,7 +12,7 @@ Now you have to configure some parameters of the Nervion setup in the Parameteri
 
 ![Nervion Parameters configuration](/doc/images/parameters.png)
 
-The parameters you can configure in that window are the following:
+The parameters you can configure in that window are outlined below:
 
 - **Number of slave/compute nodes**: Number of VMs that will be part of the Kubernetes cluster for Nervion.
 - **EPC implementation**: Core Network you want to use. Currently, there are six different core networks: four 4G cores (OAI, srsEPC, NextEPC and MobileStream) and two 5G cores (Free5GC and Open5GS).  In case you want to deploy there any other core network, there is another option named "Empty" that deploys an empty machine.
@@ -21,7 +21,7 @@ The parameters you can configure in that window are the following:
 - **(Advanced) Number of cores**: Number of cores of each VM that will be part of the Kubernetes cluster.
 - **(Advanced) RAM Size**: RAM Size of each VM that will be part of the Kubernetes cluster.
 
-Once you're done with the parameters, you have to click on "Next" to proceed with the instantiation. Now you need to select the name of the experiment and the CLuster location for Nervion and the Core. You can use the same values used in the image below. 
+Once you're done with the parameters, you have to click on "Next" to proceed with the instantiation. Now you need to select the name of the experiment and the Cluster location for Nervion and the Core. You can use the same values used in the image below. 
 
 ![Experiment General configuration](/doc/images/parameters2.png)
 

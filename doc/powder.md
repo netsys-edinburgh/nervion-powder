@@ -31,13 +31,13 @@ After configuring the name and locations of the experiment, you have to click on
 
 # Profile Usage
 
-Once the experiment is ready, you can ssh all the VMs and machines that are used by clicking "List View". Under List View, you will see a table of all the machines (VMs and physical machines), some information about each machine and the SSH command to access each of them. 
+Once the experiment is ready, you can ssh to all the VMs and machines that are used by clicking "List View". Under List View, you will see a table of all the machines (VMs and physical machines), some information about each machine and the SSH command to access each of them. 
 
 Each experiment must have one machine for the core and one machine named "master" for the master node of the Kubernetes cluster used by Nervion. If the Multiplexer parameter has been selected during the instantiation, another machine named "multiplexer" would be in the list. Finally, there would be a set of slave machines that match with the number of nodes for the cluster that you have selected during the instantiation. The image below shows the List View of an experiment with the multiplexer and only one slave node:
 
 ![1-node Nervion experiment](/doc/images/ssh.png)
 
-Installing Kubernetes in the master node and the slave nodes and deploying Nervion takes some time (5-10 mins). You can check the state of the installation in the masternode or in any slave node by ssh'ing the desired machine and running the following command:
+Installing Kubernetes in the master node and the slave nodes, and deploying Nervion takes some time (5-10 mins). You can check the state of the installation in the master node or in any slave node by ssh'ing the desired machine and running the following command:
 ```bash
 cat /local/repository/deploy.log
 ```

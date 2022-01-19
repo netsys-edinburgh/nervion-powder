@@ -8,6 +8,8 @@ For any issues with Nervion on Powder or suggestions, you can contact us at jon.
 
 In order to use Nervion, you first need to log in [Powder](https://www.powderwireless.net/login.php). Once you have logged in, you will be redirected to the User Dashboard. If you click in the *Experiment* box (Top-left corner), a drop-down menu will pop up. From that menu, you have to click on the option named "Start Experiment". Now you will need to find the Nervion profile. To do that, click in the "Change Profile" and, using the Search bar, select the profile named "Nervion" by clicking on the "Select Profile" button with the profile selected on the left side. Now, the selected profile should be the Nervion profile. To continue with the instantiation, click on the "Next" button.
 
+Alternatively, you can directly access the [profile](https://www.powderwireless.net/p/Test5G/Nervion) and instantiate it from there.
+
 Now you have to configure some parameters of the Nervion setup in the Parameterize window:
 
 ![Nervion Parameters configuration](/doc/images/parameters.png)

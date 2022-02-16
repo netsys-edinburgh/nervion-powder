@@ -13,3 +13,7 @@ Nervion is currently accessible through the [Powder platform](https://powderwire
 This repository contains the source code of the Nervion's Powder Profile released under the MIT license.
 
 Source code of Nervion will also be made available upon request. For getting access to it, please contact *jon.larrea@ed.ac.uk*.
+
+# Sponsorship
+
+If you find Nervion useful, please consider sponsoring my work.

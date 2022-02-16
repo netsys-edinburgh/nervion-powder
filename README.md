@@ -17,3 +17,4 @@ Source code of Nervion will also be made available upon request. For getting acc
 # Sponsorship
 
 If you find Nervion useful, please consider sponsoring my work.
+[:heart: Sponsor on GitHub](https://github.com/sponsors/j0lama)

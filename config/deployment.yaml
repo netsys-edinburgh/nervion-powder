@@ -47,6 +47,9 @@ spec:
       containers:
       - name: ran-emulator
         image: j0lama/ran_controller:latest
+        env:
+        - name: PYTHONUNBUFFERED
+          VALUE: "0"
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

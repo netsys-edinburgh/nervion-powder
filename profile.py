@@ -65,10 +65,10 @@ pc = portal.Context()
 
 pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
                    portal.ParameterType.INTEGER, 1)
-pc.defineParameter("EPC", "EPC implementation",
-                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ('Empty','Empty')])
 #pc.defineParameter("EPC", "EPC implementation",
-#                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test"), ('Empty','Empty')])
+#                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ('Empty','Empty')])
+pc.defineParameter("EPC", "EPC implementation",
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test"), ('Empty','Empty')])
 pc.defineParameter("Hardware", "EPC hardware",
                    portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
@@ -81,10 +81,10 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
-#pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
-#                   portal.ParameterType.INTEGER, 1, advanced=True)
-#pc.defineParameter("ck_version", "Test Core version",
-#                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], longDescription='Test Core 4G or 5G', advanced=True)
+pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
+                   portal.ParameterType.INTEGER, 1, advanced=True)
+pc.defineParameter("ck_version", "Test Core version",
+                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], longDescription='Test Core 4G or 5G', advanced=True)
 
 
 params = pc.bindParameters()

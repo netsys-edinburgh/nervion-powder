@@ -49,7 +49,7 @@ spec:
         image: j0lama/ran_controller:latest
         env:
         - name: PYTHONUNBUFFERED
-          VALUE: "0"
+          value: "0"
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

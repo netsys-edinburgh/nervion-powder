@@ -54,7 +54,7 @@ spec:
     kind: Deployment
     name: corekube-worker
   minReplicas: 2
-  maxReplicas: 200
+  maxReplicas: 2000
   targetCPUUtilizationPercentage: 80
 
 

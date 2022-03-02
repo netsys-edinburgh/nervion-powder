@@ -6,7 +6,7 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["pods"]
-  verbs: ["create", "delete"]
+  verbs: ["create", "delete", "list"]
 
 # Cluster Role Binder: Authorise the controller to create pods
 ---

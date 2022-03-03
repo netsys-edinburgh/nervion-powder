@@ -40,7 +40,7 @@ spec:
               fieldPath: status.podIP
         resources:
           limits:
-            cpu: 2000m
+            cpu: 3000m
           requests:
             cpu: 5m
 ---
@@ -54,7 +54,7 @@ spec:
     kind: Deployment
     name: corekube-worker
   minReplicas: 2
-  maxReplicas: 2000
+  maxReplicas: 1000
   targetCPUUtilizationPercentage: 80
 
 

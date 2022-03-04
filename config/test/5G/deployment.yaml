@@ -53,8 +53,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: corekube-worker
-  minReplicas: 560
-  maxReplicas: 560
+  minReplicas: 2
+  maxReplicas: 1000
   targetCPUUtilizationPercentage: 80
 
 

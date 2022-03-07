@@ -40,9 +40,9 @@ spec:
               fieldPath: status.podIP
         resources:
           limits:
-            cpu: 3000m
+            cpu: 1m
           requests:
-            cpu: 5m
+            cpu: 1m
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -53,8 +53,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: corekube-worker
-  minReplicas: 2
-  maxReplicas: 1000
+  minReplicas: 1
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 80
 
 

@@ -40,9 +40,9 @@ spec:
               fieldPath: status.podIP
         resources:
           limits:
-            cpu: 3m
+            cpu: 4m
           requests:
-            cpu: 3m
+            cpu: 4m
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler

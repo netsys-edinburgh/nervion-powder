@@ -68,7 +68,7 @@ pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
 #pc.defineParameter("EPC", "EPC implementation",
 #                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ('Empty','Empty')])
 pc.defineParameter("EPC", "EPC implementation",
-                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("Test", "Test"), ('Empty','Empty')])
+                   portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("CoreKube", "CoreKube"), ('Empty','Empty')])
 pc.defineParameter("Hardware", "EPC hardware",
                    portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
@@ -81,10 +81,10 @@ pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
                    longDescription="RAM size (GB)",
                    advanced=True)
-pc.defineParameter("ck_nodes", "Number of slave/compute nodes for the Test Core",
+pc.defineParameter("ck_nodes", "Number of slave/compute nodes for CoreKube",
                    portal.ParameterType.INTEGER, 1, advanced=True)
-pc.defineParameter("ck_version", "Test Core version",
-                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], longDescription='Test Core 4G or 5G', advanced=True)
+pc.defineParameter("ck_version", "CoreKube version",
+                   portal.ParameterType.STRING,"4G",[("4G","4G"),("5G","5G")], longDescription='CoreKube 4G or 5G', advanced=True)
 
 
 params = pc.bindParameters()
@@ -125,7 +125,7 @@ elif params.EPC == "free5GC":
     rspec = PG.Request()
     epc = rspec.RawPC("epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-elif params.EPC == "Test":
+elif params.EPC == "CoreKube":
     rspec = PG.Request()
     #ck_master = rspec.XenVM('masterck')
     #ck_master.cores = 4
@@ -154,7 +154,7 @@ netmask="255.255.255.0"
 
 epclink = rspec.Link("s1-lan")
 
-if params.EPC == 'Test':
+if params.EPC == 'CoreKube':
     iface = ck_master.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
     epclink.addInterface(iface)
@@ -166,7 +166,7 @@ else:
     epclink.addInterface(iface)
 
 # CK Slaves
-if params.EPC == 'Test':
+if params.EPC == 'CoreKube':
     for i in range(0,params.ck_nodes):
         #ck_s = rspec.XenVM('ck_slave'+str(i))
         #ck_s.cores = int(params.cores)

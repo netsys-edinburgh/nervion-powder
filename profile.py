@@ -142,7 +142,6 @@ elif params.EPC == "CoreKube":
     ck_master = newMachine(rspec, params, "masterck")
     ck_master.routable_control_ip = True
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-    ck_master.Site('CK')
     if params.ck_version == '4G':
         ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_master.sh"))
     else:
@@ -163,7 +162,7 @@ netmask="255.255.255.0"
 epclink = rspec.Link("s1-lan")
 
 if params.EPC == 'CoreKube':
-    ck_master.Site('CoreKube')
+    ck_master.Site('CK')
     iface = ck_master.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
     epclink.addInterface(iface)
@@ -182,7 +181,7 @@ if params.EPC == 'CoreKube':
         ck_s = newMachine(rspec, params, 'ck_slave'+str(i))
         ck_s.routable_control_ip = True
         ck_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-        ck_s.Site('CoreKube')
+        ck_s.Site('CK')
         iface = ck_s.addInterface()
         iface.addAddress(PG.IPv4Address("192.168.4." + str(79-i), netmask))
         epclink.addInterface(iface)

@@ -26,7 +26,7 @@ import geni.urn as URN
 import geni.rspec.emulab.pnext as PN
 
 def newMachine(rspec, params, name):
-    if params.Harware == 'VM':
+    if params.Hardware == 'VM':
         machine = rspec.XenVM(name)
         machine.cores = params.cores
         machine.ram = 1024 * params.ram

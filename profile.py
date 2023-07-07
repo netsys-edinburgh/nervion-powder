@@ -25,6 +25,18 @@ import geni.urn as URN
 #
 import geni.rspec.emulab.pnext as PN
 
+def newMachine(rspec, params, name):
+    if params.Harware == 'VM':
+        machine = rspec.XenVM(name)
+        machine.cores = params.cores
+        machine.ram = 1024 * params.ram
+    else:
+        machine = rspec.RawPC(name)
+        machine.hardware_type = params.Hardware
+    
+    return machine
+
+
 #
 # Globals
 #
@@ -70,7 +82,7 @@ pc.defineParameter("computeNodeCount", "Number of slave/compute nodes",
 pc.defineParameter("EPC", "EPC implementation",
                    portal.ParameterType.STRING,"OAI",[("OAI","Open Air Inrterface"),("srsLTE","srsLTE"), ("MobileStream", "MobileStream"), ("NextEPC", "NextEPC"), ("free5GC", "free5GC"), ("Open5GS", "Open5GS"), ("CoreKube", "CoreKube"), ('Empty','Empty')])
 pc.defineParameter("Hardware", "EPC hardware",
-                   portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000")])
+                   portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000"), ("VM", "VM")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
                    portal.ParameterType.BOOLEAN, True)
 pc.defineParameter("cores", "Number of cores",
@@ -98,40 +110,36 @@ pc.verifyParameters()
 
 if params.EPC == "OAI":
     rspec = pc.makeRequestRSpec()
-    epc = rspec.RawPC("epc")
+    epc = newMachine(rspec, params, "epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/bin/config_oai.pl -r EPC"))
     connectOAI_DS(epc)
 elif params.EPC == "srsLTE":
     rspec = pc.makeRequestRSpec()
-    epc = rspec.RawPC("epc")
+    epc = newMachine(rspec, params, "epc")
     epc.disk_image = GLOBALS.OAI_EPC_IMG
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/srslte.sh"))
 elif params.EPC == "MobileStream":
     rspec = PG.Request()
-    epc = rspec.RawPC("node0")
+    epc = newMachine(rspec, params, "node0")
     epc.disk_image = GLOBALS.MSIMG
 elif params.EPC == "NextEPC":
     rspec = PG.Request()
-    epc = rspec.RawPC("epc")
+    epc = newMachine(rspec, params, "epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/nextepc.sh"))
 elif params.EPC == "Open5GS":
     rspec = PG.Request()
-    epc = rspec.RawPC("epc")
+    epc = newMachine(rspec, params, "epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     epc.addService(PG.Execute(shell="sh", command="/usr/bin/sudo /local/repository/scripts/open5gs_setup.sh"))
 elif params.EPC == "free5GC":
     rspec = PG.Request()
-    epc = rspec.RawPC("epc")
+    epc = newMachine(rspec, params, "epc")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 elif params.EPC == "CoreKube":
     rspec = PG.Request()
-    #ck_master = rspec.XenVM('masterck')
-    #ck_master.cores = 4
-    #ck_master.ram = 1024 * 8
-    ck_master = rspec.RawPC("masterck")
-    ck_master.hardware_type = params.Hardware
+    ck_master = newMachine(rspec, params, "masterck")
     ck_master.routable_control_ip = True
     ck_master.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     ck_master.Site('CK')
@@ -141,7 +149,7 @@ elif params.EPC == "CoreKube":
         ck_master.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ck_5g_master.sh"))
 elif params.EPC == "Empty":
     rspec = PG.Request()
-    epc = rspec.RawPC("core")
+    epc = newMachine(rspec, params, "core")
     epc.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 
 
@@ -155,11 +163,11 @@ netmask="255.255.255.0"
 epclink = rspec.Link("s1-lan")
 
 if params.EPC == 'CoreKube':
+    ck_master.Site('CoreKube')
     iface = ck_master.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
     epclink.addInterface(iface)
 else:
-    epc.hardware_type = params.Hardware
     epc.Site('Core')
     iface = epc.addInterface()
     iface.addAddress(PG.IPv4Address("192.168.4.80", netmask))
@@ -171,11 +179,10 @@ if params.EPC == 'CoreKube':
         #ck_s = rspec.XenVM('ck_slave'+str(i))
         #ck_s.cores = int(params.cores)
         #ck_s.ram = 1024 * int(params.ram)
-        ck_s = rspec.RawPC('ck_slave'+str(i))
-        ck_s.hardware_type = params.Hardware
+        ck_s = newMachine(rspec, params, 'ck_slave'+str(i))
         ck_s.routable_control_ip = True
         ck_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
-        ck_s.Site('CK')
+        ck_s.Site('CoreKube')
         iface = ck_s.addInterface()
         iface.addAddress(PG.IPv4Address("192.168.4." + str(79-i), netmask))
         epclink.addInterface(iface)
@@ -197,11 +204,7 @@ if params.multi == True:
 
 
 # Nervion Master
-kube_m = rspec.XenVM('master')
-kube_m.cores = 4
-kube_m.ram = 1024 * 8
-#kube_m = rspec.RawPC("master")
-#kube_m.hardware_type = params.Hardware
+kube_m = newMachine(rspec, params, "master")
 kube_m.routable_control_ip = True
 kube_m.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
 kube_m.Site('Nervion')
@@ -212,11 +215,7 @@ kube_m.addService(PG.Execute(shell="bash", command="/local/repository/scripts/ma
 
 # Nervion Slaves
 for i in range(0,params.computeNodeCount):
-    kube_s = rspec.XenVM('slave'+str(i))
-    kube_s.cores = int(params.cores)
-    kube_s.ram = 1024 * int(params.ram)
-    #kube_s = rspec.RawPC('slave'+str(i))
-    #kube_s.hardware_type = params.Hardware
+    kube_s = newMachine(rspec, params, 'slave'+str(i))
     kube_s.routable_control_ip = True
     kube_s.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD'
     kube_s.Site('Nervion')

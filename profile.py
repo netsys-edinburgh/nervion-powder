@@ -85,13 +85,13 @@ pc.defineParameter("Hardware", "EPC hardware",
                    portal.ParameterType.STRING,"d430",[("d430","d430"),("d710","d710"), ("d820", "d820"), ("pc3000", "pc3000"), ("VM", "VM")])
 pc.defineParameter("multi", "Multiplexer (True or False)",
                    portal.ParameterType.BOOLEAN, True)
-pc.defineParameter("cores", "Number of cores",
+pc.defineParameter("cores", "VM number of cores",
                    portal.ParameterType.STRING,"4",[("4","4"),("6","6"), ("8", "8"), ("10", "10"), ("12", "12")],
                    longDescription="Number of cores of each Nervion node.",
                    advanced=True)
 pc.defineParameter("ram", "RAM size",
                    portal.ParameterType.STRING,"4",[("4","4"),("8","8"), ("12", "12"), ("16", "16"), ("20", "20"), ("24", "24"), ("32", "32")],
-                   longDescription="RAM size (GB)",
+                   longDescription="VM RAM size (GB)",
                    advanced=True)
 pc.defineParameter("ck_nodes", "Number of slave/compute nodes for CoreKube",
                    portal.ParameterType.INTEGER, 1, advanced=True)

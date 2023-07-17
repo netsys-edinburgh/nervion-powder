@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: corekube-worker
-        image: andrewferguson/corekube5g-worker:latest
+        image: andrewferguson/corekube-worker5g:latest
         ports:
         - containerPort: 5566
           protocol: UDP
@@ -40,7 +40,7 @@ spec:
               fieldPath: status.podIP
         resources:
           limits:
-            cpu: 30m
+            cpu: 300m
           requests:
             cpu: 10m
 ---

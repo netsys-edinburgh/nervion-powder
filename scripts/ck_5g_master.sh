@@ -153,9 +153,8 @@ done
 echo "All nodes joined"
 
 # Display for the end-user where the Kubernetes dashboard is, using our public
-# hostname that we can get from ipinfo.io - this is based on an assumption that
-# the machine would have a public hostname.
-echo "Kubernetes is ready at: http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+# hostname
+echo "Kubernetes is ready at: http://$(hostname --fqdn):12345"
 
 # Also make the link display on every SSH login too, for convenience:
 BOLD_RESET="\033[22m"
@@ -167,7 +166,7 @@ RESET="\033[0m"
 cat <<ASD >> /users/${username}/.ssh/rc
 echo "${BLUE}==================${RESET}"
 echo "${BLUE}This is the ${BOLD}CoreKube${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
-echo "${BOLD}CoreKube Dashboard:${RESET} http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+echo "${BOLD}CoreKube Dashboard:${RESET} http://$(hostname --fqdn):12345"
 echo ""
 echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
 echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"

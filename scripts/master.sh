@@ -93,17 +93,18 @@ source <(kubectl completion bash)
 # the file itself.
 echo "Launching Kubernetes Dashboard..."
 sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
- 
-# run port-forward to make the dashboard portal accessible from outside
-echo "Port-forwarding port 80 of dashboard service at public port 12345..."
-sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
 
+# We should now port-forward the dashboard service which is at port 80 locally,
+# but we'll do that later since it'll take a few seconds to get everything ready
+# after applying the YAML file, and it's better to do other things (like doing
+# other installations) in parallel.
+#
 # Alternatively we could also run
 # sudo kubectl proxy -p 12345 --address='0.0.0.0' --accept-hosts='^*$' &
-# which is a bit more straightforward since you don't need to make the modifications
-# we made in the YAML file to use HTTP upstream. But, this makes all URLs quite
-# messy since you are proxying the API service and not the dashboard service itself
-# so all URLs need be prefixed with /api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+# here and now, which will make the kubernetes API service public (which can be
+# done before dashboard is ready). This is a bit more straightforward than
+# port-forwarding in terms of modifying the YAML file, but it makes URLs messy
+# since you have to prefix everything with long boilerplate.
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -124,6 +125,16 @@ sudo cp linux-amd64/helm /usr/local/bin/helm
 
 source <(helm completion bash)
 
+# run port-forward to make the dashboard portal accessible from outside
+echo "Port-forwarding port 80 of dashboard service at public port 12345..."
+# Make sure the dashboard pod is ready before port-forwarding, since otherwise
+# kubectl port-forward will fail. This adds a slight delay to the setup but it
+# should be very negligible because we've moved the waiting/port-forwarding to
+# after the helm installation above, which should give it enough time to start
+# up in the background. 
+kubectl wait -n kubernetes-dashboard --for=condition=ready pod --all
+sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
+
 # Wait till the slave nodes get joined and update the kubelet daemon successfully
 # number of slaves + 1 master
 node_cnt=$(($(/local/repository/scripts/geni-get-param computeNodeCount) + 1))
@@ -140,7 +151,7 @@ echo "All nodes joined"
 # Display for the end-user where the Kubernetes dashboard is, using our public
 # hostname that we can get from ipinfo.io - this is based on an assumption that
 # the machine would have a public hostname.
-echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
+echo "Kubernetes is ready at: http://$(curl -s ipinfo.io | jq -r .hostname):12345"
 
 # Also make the link display on every SSH login too, for convenience:
 BOLD_RESET="\033[22m"

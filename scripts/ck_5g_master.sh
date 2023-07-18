@@ -81,13 +81,15 @@ sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Do
 source <(kubectl completion bash)
 
 # kubectl get nodes --kubeconfig=${KUBEHOME}/admin.conf -s https://155.98.36.111:6443
+
 # Install dashboard: https://github.com/kubernetes/dashboard
 # v3 of kubernetes-dashboard has many software dependencies like Nginx Ingress and the set up process
 # changes drastically. v2 serves the exact same functionality with a slightly more straightforward setup,
 # so we will use the latest v2 (2.7.0) recommended YAML file as a base.
-# It has been modified to allow HTTP access and to allow admin login without credentials.
+# It has been modified to allow HTTP access and to allow admin login without credentials. More details in
+# the file itself.
 echo "Launching Kubernetes Dashboard..."
-sudo kubectl apply -f https://gist.githubusercontent.com/yutotakano/f6cce5db44da105b2dab4e113c0653e1/raw/c6b15225869f7daca8c306395f7583c3454e9dd7/kubernetes-dashboard-v2.7.0-corekube.yaml
+sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
 echo "Running proxy at port 8080..."

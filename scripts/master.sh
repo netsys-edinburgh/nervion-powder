@@ -94,9 +94,16 @@ source <(kubectl completion bash)
 echo "Launching Kubernetes Dashboard..."
 sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
  
-# run the proxy to make the dashboard portal accessible from outside
-echo "Running proxy at port 8080..."
-sudo kubectl proxy -p 8080 --address='0.0.0.0' --accept-hosts='^*$' &
+# run port-forward to make the dashboard portal accessible from outside
+echo "Port-forwarding port 80 of dashboard service at public port 12345..."
+sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
+
+# Alternatively we could also run
+# sudo kubectl proxy -p 12345 --address='0.0.0.0' --accept-hosts='^*$' &
+# which is a bit more straightforward since you don't need to make the modifications
+# we made in the YAML file to use HTTP upstream. But, this makes all URLs quite
+# messy since you are proxying the API service and not the dashboard service itself
+# so all URLs need be prefixed with /api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -136,13 +143,21 @@ echo "All nodes joined"
 echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
 
 # Also make the link display on every SSH login too, for convenience:
+BOLD_RESET="\033[22m"
+BOLD="\033[1m"
+GREEN="\033[32m"
+BLUE="\033[34m"
+RED="\033[31m"
+RESET="\033[0m"
+
 cat <<ASD >> /users/${username}/.ssh/rc
-echo "\033[32m==================\033[0m"
-echo "\033[32mThis is the Nervion Kubernetes cluster \033[1mmaster node.\033[0m"
-echo "\033[1mNervion Kubernetes Dashboard:\033[0m http://$(curl -s ipinfo.io | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
-echo "  \033[34mWhen prompted for authentication, press \"Skip\" to use the built-in admin account."
-echo "  \033[31;1mWarning:\033[0m\033[31m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.\033[0m"
-echo "\033[32m==================\033[0m"
+echo "${GREEN}==================${RESET}"
+echo "${GREEN}This is the ${BOLD}Nervion${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
+echo "${BOLD}Nervion Kubernetes Dashboard:${RESET} http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+echo ""
+echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
+echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"
+echo "${GREEN}==================${RESET}"
 ASD
 
 #Deploy metrics server

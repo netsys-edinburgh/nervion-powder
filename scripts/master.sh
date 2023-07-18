@@ -167,6 +167,8 @@ echo "${BOLD}Nervion Kubernetes Dashboard:${RESET} http://$(hostname --fqdn):123
 echo ""
 echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
 echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"
+echo ""
+echo "${GREEN}${BOLD}Nervion Controller UI:${RESET} http://$(hostname --fqdn):34567"
 echo "${GREEN}==================${RESET}"
 ASD
 

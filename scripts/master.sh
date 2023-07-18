@@ -85,6 +85,19 @@ sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Do
 # use this to enable autocomplete
 source <(kubectl completion bash)
 
+# Install dashboard: https://github.com/kubernetes/dashboard
+# v3 of kubernetes-dashboard has many software dependencies like Nginx Ingress and the set up process
+# changes drastically. v2 serves the exact same functionality with a slightly more straightforward setup,
+# so we will use the latest v2 (2.7.0) recommended YAML file as a base.
+# It has been modified to allow HTTP access and to allow admin login without credentials. More details in
+# the file itself.
+echo "Launching Kubernetes Dashboard..."
+sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
+ 
+# run the proxy to make the dashboard portal accessible from outside
+echo "Running proxy at port 8080..."
+sudo kubectl proxy -p 8080 --address='0.0.0.0' --accept-hosts='^*$' &
+
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
 mkdir -p $GOPATH
@@ -116,6 +129,20 @@ do
     sleep 1
 done
 echo "All nodes joined"
+
+# Display for the end-user where the Kubernetes dashboard is, using our public
+# hostname that we can get from ipinfo.io - this is based on an assumption that
+# the machine would have a public hostname.
+echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
+
+# Also make the link display on every SSH login too, for convenience:
+cat <<ASD >> /users/${username}/.ssh/rc
+echo "\033[34m==================\033[0m"
+echo "\033[1mCoreKube Dashboard:\033[0m http://$(curl -s ipinfo.io | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
+echo "  When prompted for authentication, press \"Skip\" to use the built-in admin account."
+echo "  \033[31;1mWarning:\033[0m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is \033[31mdangerous\033[0m for anything else."
+echo "\033[34m==================\033[0m"
+ASD
 
 #Deploy metrics server
 sudo kubectl create -f config/test/metrics-server.yaml

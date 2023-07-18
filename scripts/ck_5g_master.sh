@@ -82,13 +82,12 @@ source <(kubectl completion bash)
 
 # kubectl get nodes --kubeconfig=${KUBEHOME}/admin.conf -s https://155.98.36.111:6443
 # Install dashboard: https://github.com/kubernetes/dashboard
-# TODO: why are we using this specific release? Would the latest get us anything?
 echo "Launching Kubernetes Dashboard..."
-sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+sudo kubectl apply -f https://gist.githubusercontent.com/yutotakano/f6cce5db44da105b2dab4e113c0653e1/raw/04f426ac2e617da72c919f0c4b2e8e904d87e832/kubernetes-dashboard-v2.7.0-corekube.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
 echo "Running proxy at port 8080..."
-sudo kubectl proxy  --kubeconfig=${KUBEHOME}/admin.conf -p 8080 &
+sudo kubectl proxy -p 8080 --address='0.0.0.0' --accept-hosts='^*$' &
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -129,15 +128,9 @@ do
 done
 echo "All nodes joined"
 
-dashboard_endpoint=`kubectl get endpoints --all-namespaces |grep dashboard|awk '{print $3}'`
-dashboard_credential=`kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') |grep token: | awk '{print $2}'`
-
-echo "Kubernetes is ready at: http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login"
-
-# optional address
-echo "kubernetes dashboard endpoint: $dashboard_endpoint"
-# dashboard credential
-echo "And this is the dashboard credential: $dashboard_credential"
+# Display for the end-user where the Kubernetes dashboard is, using our pcXXX hostname
+# that we can get from ipinfo.io
+echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
 
 #Deploy metrics server
 sudo kubectl create -f config/test/metrics-server.yaml

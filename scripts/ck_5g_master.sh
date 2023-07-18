@@ -93,7 +93,7 @@ sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
 echo "Running proxy at port 8080..."
-sudo kubectl proxy -p 8080 --address='0.0.0.0' --accept-hosts='^*$' &
+sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 8080:80 &
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath

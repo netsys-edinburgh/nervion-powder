@@ -54,6 +54,8 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   ports:
+    - port: 80
+      targetPort: 9090
     - port: 443
       targetPort: 8443
   selector:
@@ -213,6 +215,8 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
+              protocol: TCP
+            - containerPort: 9090
               protocol: TCP
           args:
             - --auto-generate-certificates

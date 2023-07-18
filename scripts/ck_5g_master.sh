@@ -82,8 +82,12 @@ source <(kubectl completion bash)
 
 # kubectl get nodes --kubeconfig=${KUBEHOME}/admin.conf -s https://155.98.36.111:6443
 # Install dashboard: https://github.com/kubernetes/dashboard
+# v3 of kubernetes-dashboard has many software dependencies like Nginx Ingress and the set up process
+# changes drastically. v2 serves the exact same functionality with a slightly more straightforward setup,
+# so we will use the latest v2 (2.7.0) recommended YAML file as a base.
+# It has been modified to allow HTTP access and to allow admin login without credentials.
 echo "Launching Kubernetes Dashboard..."
-sudo kubectl apply -f https://gist.githubusercontent.com/yutotakano/f6cce5db44da105b2dab4e113c0653e1/raw/04f426ac2e617da72c919f0c4b2e8e904d87e832/kubernetes-dashboard-v2.7.0-corekube.yaml
+sudo kubectl apply -f https://gist.githubusercontent.com/yutotakano/f6cce5db44da105b2dab4e113c0653e1/raw/c6b15225869f7daca8c306395f7583c3454e9dd7/kubernetes-dashboard-v2.7.0-corekube.yaml
  
 # run the proxy to make the dashboard portal accessible from outside
 echo "Running proxy at port 8080..."
@@ -136,6 +140,8 @@ echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080
 cat <<ASD >> /users/${username}/.ssh/rc
 echo "\033[34m==================\033[0m"
 echo "\033[1mCoreKube Dashboard:\033[0m http://$(curl -s ipinfo.io | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
+echo "  When prompted for authentication, press "Skip" to use the built-in admin account.
+echo "  \033[31;1mWarning:\033[0m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is \033[31mdangerous\033[0m for anything else.
 echo "\033[34m==================\033[0m"
 ASD
 

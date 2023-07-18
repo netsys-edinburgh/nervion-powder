@@ -139,8 +139,8 @@ echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080
 cat <<ASD >> /users/${username}/.ssh/rc
 echo "\033[34m==================\033[0m"
 echo "\033[1mCoreKube Dashboard:\033[0m http://$(curl -s ipinfo.io | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
-echo "  When prompted for authentication, press \"Skip\" to use the built-in admin account."
-echo "  \033[31;1mWarning:\033[0m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is \033[31mdangerous\033[0m for anything else."
+echo "  \033[34mWhen prompted for authentication, press \"Skip\" to use the built-in admin account."
+echo "  \033[31;1mWarning:\033[0m\033[31m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.\033[0m"
 echo "\033[34m==================\033[0m"
 ASD
 

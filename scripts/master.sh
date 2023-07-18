@@ -85,6 +85,27 @@ sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Do
 # use this to enable autocomplete
 source <(kubectl completion bash)
 
+# Install dashboard: https://github.com/kubernetes/dashboard
+# v3 of kubernetes-dashboard has many software dependencies like Nginx Ingress and the set up process
+# changes drastically. v2 serves the exact same functionality with a slightly more straightforward setup,
+# so we will use the latest v2 (2.7.0) recommended YAML file as a base.
+# It has been modified to allow HTTP access and to allow admin login without credentials. More details in
+# the file itself.
+echo "Launching Kubernetes Dashboard..."
+sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
+
+# We should now port-forward the dashboard service which is at port 80 locally,
+# but we'll do that later since it'll take a few seconds to get everything ready
+# after applying the YAML file, and it's better to do other things (like doing
+# other installations) in parallel.
+#
+# Alternatively we could also run
+# sudo kubectl proxy -p 12345 --address='0.0.0.0' --accept-hosts='^*$' &
+# here and now, which will make the kubernetes API service public (which can be
+# done before dashboard is ready). This is a bit more straightforward than
+# port-forwarding in terms of modifying the YAML file, but it makes URLs messy
+# since you have to prefix everything with long boilerplate.
+
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
 mkdir -p $GOPATH
@@ -104,6 +125,16 @@ sudo cp linux-amd64/helm /usr/local/bin/helm
 
 source <(helm completion bash)
 
+# run port-forward to make the dashboard portal accessible from outside
+echo "Port-forwarding port 80 of dashboard service at public port 12345..."
+# Make sure the dashboard pod is ready before port-forwarding, since otherwise
+# kubectl port-forward will fail. This adds a slight delay to the setup but it
+# should be very negligible because we've moved the waiting/port-forwarding to
+# after the helm installation above, which should give it enough time to start
+# up in the background. 
+kubectl wait -n kubernetes-dashboard --for=condition=ready pod --all
+sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
+
 # Wait till the slave nodes get joined and update the kubelet daemon successfully
 # number of slaves + 1 master
 node_cnt=$(($(/local/repository/scripts/geni-get-param computeNodeCount) + 1))
@@ -116,6 +147,29 @@ do
     sleep 1
 done
 echo "All nodes joined"
+
+# Display for the end-user where the Kubernetes dashboard is, using our public
+# hostname that we can get from ipinfo.io - this is based on an assumption that
+# the machine would have a public hostname.
+echo "Kubernetes is ready at: http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+
+# Also make the link display on every SSH login too, for convenience:
+BOLD_RESET="\033[22m"
+BOLD="\033[1m"
+GREEN="\033[32m"
+BLUE="\033[34m"
+RED="\033[31m"
+RESET="\033[0m"
+
+cat <<ASD >> /users/${username}/.ssh/rc
+echo "${GREEN}==================${RESET}"
+echo "${GREEN}This is the ${BOLD}Nervion${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
+echo "${BOLD}Nervion Kubernetes Dashboard:${RESET} http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+echo ""
+echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
+echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"
+echo "${GREEN}==================${RESET}"
+ASD
 
 #Deploy metrics server
 sudo kubectl create -f config/test/metrics-server.yaml

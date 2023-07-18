@@ -54,8 +54,13 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   ports:
+    # Modification by CoreKube team to expose HTTP port too
+    - port: 80
+      targetPort: 9090
+      name: tcp-80
     - port: 443
       targetPort: 8443
+      name: tcp-443
   selector:
     k8s-app: kubernetes-dashboard
 
@@ -214,16 +219,24 @@ spec:
           ports:
             - containerPort: 8443
               protocol: TCP
+            # Modification to expose HTTP port
+            - containerPort: 9090
+              protocol: TCP
           args:
-            - --auto-generate-certificates
             - --namespace=kubernetes-dashboard
             # Uncomment the following line to manually specify Kubernetes API server Host
             # If not specified, Dashboard will attempt to auto discover the API server and connect
             # to it. Uncomment only if the default does not work.
             # - --apiserver-host=http://my-address:port
-            # Modification by CoreKube team to allow HTTP login and using admin login
+
+            # Modification by CoreKube team to allow HTTP login and using admin login.
+            # This disables the default HTTPS 8443 port and makes kubernetes-dashboard use
+            # the default HTTP port 9090 instead.
             - --enable-insecure-login
             - --enable-skip-login
+            - --insecure-bind-address=0.0.0.0
+            - --disable-settings-authorizer
+            #- --auto-generate-certificates (uncomment to use 8443)
           volumeMounts:
             - name: kubernetes-dashboard-certs
               mountPath: /certs
@@ -232,9 +245,9 @@ spec:
               name: tmp-volume
           livenessProbe:
             httpGet:
-              scheme: HTTPS
+              scheme: HTTP # Modification by CoreKube team to use HTTP instead of HTTPS
               path: /
-              port: 8443
+              port: 9090 # Modification by CoreKube team to use 9090 instead of 8443
             initialDelaySeconds: 30
             timeoutSeconds: 30
           securityContext:

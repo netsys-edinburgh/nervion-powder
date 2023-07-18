@@ -90,10 +90,18 @@ source <(kubectl completion bash)
 # the file itself.
 echo "Launching Kubernetes Dashboard..."
 sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
- 
-# run the proxy to make the dashboard portal accessible from outside
-echo "Running proxy at port 8080..."
-sudo kubectl proxy -p 8080 --address='0.0.0.0' --accept-hosts='^*$' &
+
+# We should now port-forward the dashboard service which is at port 80 locally,
+# but we'll do that later since it'll take a few seconds to get everything ready
+# after applying the YAML file, and it's better to do other things (like doing
+# other installations) in parallel.
+#
+# Alternatively we could also run
+# sudo kubectl proxy -p 12345 --address='0.0.0.0' --accept-hosts='^*$' &
+# here and now, which will make the kubernetes API service public (which can be
+# done before dashboard is ready). This is a bit more straightforward than
+# port-forwarding in terms of modifying the YAML file, but it makes URLs messy
+# since you have to prefix everything with long boilerplate.
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -113,6 +121,16 @@ tar xf helm-v3.1.0-linux-amd64.tar.gz
 sudo cp linux-amd64/helm /usr/local/bin/helm
 
 source <(helm completion bash)
+
+# run port-forward to make the dashboard portal accessible from outside
+echo "Port-forwarding port 80 of dashboard service at public port 12345..."
+# Make sure the dashboard pod is ready before port-forwarding, since otherwise
+# kubectl port-forward will fail. This adds a slight delay to the setup but it
+# should be very negligible because we've moved the waiting/port-forwarding to
+# after the helm installation above, which should give it enough time to start
+# up in the background. 
+kubectl wait -n kubernetes-dashboard --for=condition=ready pod --all
+sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
 
 # Install metrics-server for HPA
 # (Old method)
@@ -134,17 +152,26 @@ do
 done
 echo "All nodes joined"
 
-# Display for the end-user where the Kubernetes dashboard is, using our pcXXX hostname
-# that we can get from ipinfo.io
-echo "Kubernetes is ready at: http://$(curl ipinfo.io -s | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
+# Display for the end-user where the Kubernetes dashboard is, using our public
+# hostname that we can get from ipinfo.io - this is based on an assumption that
+# the machine would have a public hostname.
+echo "Kubernetes is ready at: http://$(curl -s ipinfo.io | jq -r .hostname):12345"
 
 # Also make the link display on every SSH login too, for convenience:
+BOLD_RESET="\033[22m"
+BOLD="\033[1m"
+BLUE="\033[34m"
+RED="\033[31m"
+RESET="\033[0m"
+
 cat <<ASD >> /users/${username}/.ssh/rc
-echo "\033[34m==================\033[0m"
-echo "\033[1mCoreKube Dashboard:\033[0m http://$(curl -s ipinfo.io | jq -r .hostname):8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default"
-echo "  When prompted for authentication, press \"Skip\" to use the built-in admin account."
-echo "  \033[31;1mWarning:\033[0m This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is \033[31mdangerous\033[0m for anything else."
-echo "\033[34m==================\033[0m"
+echo "${BLUE}==================${RESET}"
+echo "${BLUE}This is the ${BOLD}CoreKube${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
+echo "${BOLD}CoreKube Dashboard:${RESET} http://$(curl -s ipinfo.io | jq -r .hostname):12345"
+echo ""
+echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
+echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"
+echo "${BLUE}==================${RESET}"
 ASD
 
 #Deploy metrics server

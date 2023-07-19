@@ -185,6 +185,12 @@ config/test/loghpa.sh &
 # Log all the traffic on the CK master node
 #sudo tcpdump -i any -w ~/tcpdump.pcap &
 
+# Install tshark
+sudo add-apt-repository -y ppa:wireshark-dev/stable
+sudo apt update
+export DEBIAN_FRONTEND=noninteractive
+sudo apt-get -yq install tshark
+
 # to know how much time it takes to instantiate everything.
 echo "Setup DONE!"
 date

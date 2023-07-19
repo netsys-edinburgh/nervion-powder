@@ -95,5 +95,9 @@ crontab -l | { cat; echo "* * * * * /local/repository/config/test/savelogs.py"; 
 # if it complains that "[ERROR Port-10250]: Port 10250 is in use", kill the process.
 # if it complains some file already exist, remove those. [ERROR FileAvailable--etc-kubernetes-pki-ca.crt]: /etc/kubernetes/pki/ca.crt already exists
 
+# Pull the Nervion image required for the artifact evaluation
+# to speed up the running of Nervion (from the user's perspective)
+ctr image pull docker.io/j0lama/ran_slave_5g_noreset:latest
+
 echo "Setup DONE!"
 date

@@ -179,6 +179,12 @@ sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy Test Core
 sudo kubectl create -f config/test/5G/deployment.yaml
 
+# Install tshark
+sudo add-apt-repository -y ppa:wireshark-dev/stable
+sudo apt update
+export DEBIAN_FRONTEND=noninteractive
+sudo apt-get -yq install tshark
+
 # Start logging the HPA every second
 config/test/loghpa.sh &
 

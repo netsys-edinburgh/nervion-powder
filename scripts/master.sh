@@ -161,6 +161,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 cat <<ASD >> /users/${username}/.ssh/rc
+test -z $SSH_TTY && return # Don't run when not-interactive like SCP
 echo "${GREEN}==================${RESET}"
 echo "${GREEN}This is the ${BOLD}Nervion${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
 echo "${BOLD}Nervion Kubernetes Dashboard:${RESET} http://$(hostname --fqdn):12345"

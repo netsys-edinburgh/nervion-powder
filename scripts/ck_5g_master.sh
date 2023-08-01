@@ -179,6 +179,8 @@ ASD
 sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy Test Core
 sudo kubectl create -f config/test/5G/deployment.yaml
+# Deploy Prometheus
+sudo kubectl create -f config/test/prometheus.yaml
 
 # Install tshark
 sudo add-apt-repository -y ppa:wireshark-dev/stable

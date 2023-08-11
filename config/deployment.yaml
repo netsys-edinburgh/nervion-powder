@@ -50,7 +50,7 @@ spec:
         env:
         - name: PYTHONUNBUFFERED
           value: "0"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
           name: user-interface

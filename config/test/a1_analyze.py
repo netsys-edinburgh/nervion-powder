@@ -145,6 +145,7 @@ def plot_msg_df(up_df, down_df):
     plt.xlabel('Time (s)')
     plt.ylabel('Packets per second')
     plt.title('Packets per second (PPS)')
+    plt.legend()
     plt.savefig('/local/repository/config/test/packets-per-second.pdf')
     plt.clf()
     print('Packets per second PDF saved (/local/repository/config/test/packets-per-second.pdf)')

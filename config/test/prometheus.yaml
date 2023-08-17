@@ -9,9 +9,9 @@ data:
     global:
       scrape_interval: 1s
     scrape_configs:
-      - job_name: core-monitor
+      - job_name: corekube-metrics-monitor
         static_configs:
-        - targets: ['corekube-core-monitor:5050'] # Kubernetes DNS will resolve this to the corresponding service
+        - targets: ['corekube-metrics-export-service:5050'] # Kubernetes DNS will resolve this to the corresponding service
 ---
 apiVersion: v1
 kind: Service

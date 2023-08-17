@@ -204,9 +204,9 @@ roleRef:
 apiVersion: v1
 kind: Service
 metadata:
-  name: corekube-core-monitor
+  name: corekube-metrics-export-service
   labels:
-    app: corekube-core-monitor
+    app: corekube-metrics-export-service
 spec:
   type: ClusterIP
   selector:

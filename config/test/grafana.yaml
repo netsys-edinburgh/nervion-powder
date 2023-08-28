@@ -1,7 +1,15 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: grafana
+
+---
+
+apiVersion: v1
 kind: Service
 metadata:
   name: corekube-grafana
+  namespace: grafana
   labels:
     app: corekube-grafana
 spec:
@@ -20,6 +28,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: corekube-grafana-datasources
+  namespace: grafana
   labels:
     name: corekube-grafana-datasources
 data:
@@ -49,6 +58,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: corekube-grafana-dashboard-definition
+  namespace: grafana
   labels:
     name: corekube-grafana-dashboard-definition
 data:
@@ -70,6 +80,7 @@ metadata:
   labels:
     app: corekube-grafana
   name: corekube-grafana
+  namespace: grafana
 spec:
   selector:
     matchLabels:

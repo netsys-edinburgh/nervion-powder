@@ -182,7 +182,7 @@ sudo kubectl create -f config/test/5G/deployment.yaml
 # Deploy Prometheus
 sudo kubectl create -f config/test/prometheus.yaml
 
-sudo kubectl create configmap corekube-grafana-dashboards --from-file=config/test/dashboards/
+sudo kubectl create configmap corekube-grafana-dashboards --namespace=grafana --from-file=config/test/dashboards/
 # Deploy Grafana
 sudo kubectl create -f config/test/grafana.yaml
 

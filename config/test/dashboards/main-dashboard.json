@@ -74,10 +74,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -442,9 +438,6 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -458,7 +451,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -470,8 +464,8 @@
       },
       "id": 8,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
+        "colorMode": "background",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -565,7 +559,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 5,
         "x": 2,
         "y": 17
@@ -663,7 +657,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 5,
         "x": 7,
         "y": 17
@@ -722,8 +716,12 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 5
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 10
               }
             ]
           },
@@ -732,7 +730,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 2,
         "x": 12,
         "y": 17
@@ -837,7 +835,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 10,
         "x": 14,
         "y": 17
@@ -885,9 +883,6 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -901,20 +896,21 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 0,
         "y": 20
       },
       "id": 7,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
+        "colorMode": "background",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -946,6 +942,89 @@
         }
       ],
       "title": "UEs",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-datasource-1"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 0,
+        "y": 23
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource-1"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "label_replace(rate(coremon_downlink_packets_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "Downlink Packet Rate",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource-1"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "label_replace(rate(coremon_uplink_packets_total[$__rate_interval]), \"name\", \"Uplink\", \"\", \"\")",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "Uplink Packet Rate",
+          "useBackend": false
+        }
+      ],
+      "title": "Packet Rate",
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -1009,10 +1088,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 24
+        "h": 8,
+        "w": 20,
+        "x": 4,
+        "y": 23
       },
       "id": 11,
       "options": {
@@ -1036,7 +1115,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "label_replace(rate(coremon_downlink_packets_cumulative_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
+          "expr": "label_replace(rate(coremon_downlink_packets_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1052,7 +1131,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "label_replace(rate(coremon_uplink_packets_cumulative_total[$__rate_interval]), \"name\", \"Uplink\", \"\", \"\")",
+          "expr": "label_replace(rate(coremon_uplink_packets_total[$__rate_interval]), \"name\", \"Uplink\", \"\", \"\")",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1083,6 +1162,6 @@
   "timezone": "",
   "title": "CoreKube Dashboard",
   "uid": "be3d8ddb-7d64-4ac5-b27c-3b771e5ec831",
-  "version": 3,
+  "version": 9,
   "weekStart": ""
 }

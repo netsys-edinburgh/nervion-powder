@@ -36,6 +36,9 @@ data:
     [auth.anonymous]
     enabled = true
 
+    [users]
+    home_page = /d/be3d8ddb-7d64-4ac5-b27c-3b771e5ec831/corekube-dashboard
+
 ---
 
 apiVersion: v1

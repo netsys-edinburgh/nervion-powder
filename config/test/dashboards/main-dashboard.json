@@ -111,12 +111,12 @@
             "uid": "prometheus-datasource-1"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "coremon_cpu_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}",
+          "editorMode": "code",
+          "expr": "label_replace(label_replace(label_replace(coremon_cpu_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -215,11 +215,11 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "coremon_mem_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}",
+          "expr": "label_replace(label_replace(label_replace(coremon_mem_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -317,12 +317,12 @@
             "uid": "prometheus-datasource-1"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "coremon_cpu_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}",
+          "editorMode": "code",
+          "expr": "label_replace(label_replace(label_replace(coremon_cpu_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -420,12 +420,12 @@
             "uid": "prometheus-datasource-1"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "coremon_mem_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}",
+          "editorMode": "code",
+          "expr": "label_replace(label_replace(label_replace(coremon_mem_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -591,11 +591,11 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "count(coremon_cpu_usage{namespace=\"default\", container_name=\"corekube-worker\"})",
+          "expr": "label_replace(count(coremon_cpu_usage{namespace=\"default\", container_name=\"corekube-worker\"}), \"name\", \"CK Worker Count\", \"\", \"\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -689,11 +689,11 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "coremon_ue_count_last_5_seconds",
+          "expr": "label_replace(coremon_ue_count_last_5_seconds, \"name\", \"UEs Seen in last 5 Seconds\", \"\", \"\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{name}} ",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -862,30 +862,16 @@
             "uid": "prometheus-datasource-1"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
+          "editorMode": "builder",
           "exemplar": false,
-          "expr": "avg without (ue_id) (coremon_latency)",
+          "expr": "label_replace(label_replace(label_replace(label_replace(label_replace(avg without(ue_id) (coremon_latency), \"name\", \"Registration Request\", \"uplink_msg_type\", \"65\"), \"name\", \"Authentication\", \"uplink_msg_type\", \"87\"), \"name\", \"Registration Accept\", \"uplink_msg_type\", \"94\"), \"name\", \"5G PDU Session\", \"uplink_msg_type\", \"193\"), \"name\", \"Deregistration\", \"uplink_msg_type\", \"69\")",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Up {{uplink_msg_type}} / Down {{downlink_msg_type}}",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "Latency per msg type",
           "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus-datasource-1"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg (coremon_latency)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "Average Latency"
         }
       ],
       "title": "CoreKube Latency",
@@ -961,6 +947,125 @@
       ],
       "title": "UEs",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-datasource-1"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Estimated packet rate",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource-1"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "label_replace(rate(coremon_downlink_packets_cumulative_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "Downlink Packet Rate",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource-1"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "label_replace(rate(coremon_uplink_packets_cumulative_total[$__rate_interval]), \"name\", \"Uplink\", \"\", \"\")",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "Uplink Packet Rate",
+          "useBackend": false
+        }
+      ],
+      "title": "Packet Rate",
+      "transformations": [],
+      "type": "timeseries"
     }
   ],
   "refresh": "5s",
@@ -971,13 +1076,13 @@
     "list": []
   },
   "time": {
-    "from": "now-10m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "CoreKube Dashboard",
   "uid": "be3d8ddb-7d64-4ac5-b27c-3b771e5ec831",
-  "version": 7,
+  "version": 3,
   "weekStart": ""
 }

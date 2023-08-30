@@ -27,6 +27,20 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: corekube-grafana-main-config
+  namespace: grafana
+  labels:
+    name: corekube-grafana-main-config
+data:
+  grafana.ini: |-
+    [auth.anonymous]
+    enabled = true
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: corekube-grafana-datasources
   namespace: grafana
   labels:
@@ -48,7 +62,7 @@ data:
         basicAuth:
         basicAuthUser:
         withCredentials:
-        isDefault:
+        isDefault: true
         version: 1
         editable: false
 
@@ -124,6 +138,8 @@ spec:
               cpu: 250m
               memory: 750Mi
           volumeMounts:
+            - mountPath: /etc/grafana
+              name: corekube-grafana-main-config-volume
             - mountPath: /etc/grafana/provisioning/datasources
               name: corekube-grafana-datasources-volume
             - mountPath: /etc/grafana/provisioning/dashboards
@@ -131,6 +147,9 @@ spec:
             - mountPath: /var/lib/grafana/dashboards
               name: corekube-grafana-dashboards-volume
       volumes:
+      - name: corekube-grafana-main-config-volume
+        configMap:
+          name: corekube-grafana-main-config
       - name: corekube-grafana-datasources-volume
         configMap:
           name: corekube-grafana-datasources

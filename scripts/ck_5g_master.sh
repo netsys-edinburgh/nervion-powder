@@ -83,26 +83,17 @@ source <(kubectl completion bash)
 
 # kubectl get nodes --kubeconfig=${KUBEHOME}/admin.conf -s https://155.98.36.111:6443
 
-# Install dashboard: https://github.com/kubernetes/dashboard
-# v3 of kubernetes-dashboard has many software dependencies like Nginx Ingress and the set up process
-# changes drastically. v2 serves the exact same functionality with a slightly more straightforward setup,
-# so we will use the latest v2 (2.7.0) recommended YAML file as a base.
-# It has been modified to allow HTTP access and to allow admin login without credentials. More details in
-# the file itself.
-echo "Launching Kubernetes Dashboard..."
-sudo kubectl apply -f config/test/kubernetes-dashboard.yaml
+# Deploy Prometheus
+sudo kubectl create -f config/test/prometheus.yaml
 
-# We should now port-forward the dashboard service which is at port 80 locally,
+# Deploy Grafana
+sudo kubectl create -f config/test/grafana.yaml
+sudo kubectl create configmap corekube-grafana-dashboards --namespace=grafana --from-file=config/test/dashboards/
+
+# We should now port-forward the dashboard service which is at port 3000 locally,
 # but we'll do that later since it'll take a few seconds to get everything ready
 # after applying the YAML file, and it's better to do other things (like doing
 # other installations) in parallel.
-#
-# Alternatively we could also run
-# sudo kubectl proxy -p 12345 --address='0.0.0.0' --accept-hosts='^*$' &
-# here and now, which will make the kubernetes API service public (which can be
-# done before dashboard is ready). This is a bit more straightforward than
-# port-forwarding in terms of modifying the YAML file, but it makes URLs messy
-# since you have to prefix everything with long boilerplate.
 
 # jid for json parsing.
 export GOPATH=${WORKINGDIR}/go/gopath
@@ -130,8 +121,8 @@ echo "Port-forwarding port 80 of dashboard service at public port 12345..."
 # should be very negligible because we've moved the waiting/port-forwarding to
 # after the helm installation above, which should give it enough time to start
 # up in the background. 
-kubectl wait -n kubernetes-dashboard --for=condition=ready pod --all
-sudo kubectl port-forward services/kubernetes-dashboard -n kubernetes-dashboard --address='0.0.0.0' 12345:80 &
+kubectl wait -n grafana --for=condition=ready pod --all
+sudo kubectl port-forward services/corekube-grafana -n grafana --address='0.0.0.0' 12345:3000 &
 
 # Install metrics-server for HPA
 # (Old method)
@@ -153,9 +144,8 @@ do
 done
 echo "All nodes joined"
 
-# Display for the end-user where the Kubernetes dashboard is, using our public
-# hostname
-echo "Kubernetes is ready at: http://$(hostname --fqdn):12345"
+# Display for the end-user where the dashboard is, using our public hostname
+echo "Grafana is ready at: http://$(hostname --fqdn):12345"
 
 # Also make the link display on every SSH login too, for convenience:
 BOLD_RESET="\033[22m"
@@ -169,22 +159,13 @@ test -z \$SSH_TTY && return # Don't run when not-interactive like SCP
 echo "${BLUE}==================${RESET}"
 echo "${BLUE}This is the ${BOLD}CoreKube${BOLD_RESET} Kubernetes cluster ${BOLD}master node${BOLD_RESET}."
 echo "${BOLD}CoreKube Dashboard:${RESET} http://$(hostname --fqdn):12345"
-echo ""
-echo "${BLUE}When prompted for authentication, press \"Skip\" to use the built-in admin account."
-echo "${RED}${BOLD}Warning: ${BOLD_RESET}This deployment is for research purposes only. Having a publicly accessible admin Kubernetes dashboard like this is dangerous for anything else.${RESET}"
 echo "${BLUE}==================${RESET}"
 ASD
 
-#Deploy metrics server
+# Deploy metrics server
 sudo kubectl create -f config/test/metrics-server.yaml
 # Deploy Test Core
 sudo kubectl create -f config/test/5G/deployment.yaml
-# Deploy Prometheus
-sudo kubectl create -f config/test/prometheus.yaml
-
-# Deploy Grafana
-sudo kubectl create -f config/test/grafana.yaml
-sudo kubectl create configmap corekube-grafana-dashboards --namespace=grafana --from-file=config/test/dashboards/
 
 # Install tshark
 sudo add-apt-repository -y ppa:wireshark-dev/stable

@@ -120,8 +120,9 @@ echo "Port-forwarding port 80 of dashboard service at public port 12345..."
 # kubectl port-forward will fail. This adds a slight delay to the setup but it
 # should be very negligible because we've moved the waiting/port-forwarding to
 # after the helm installation above, which should give it enough time to start
-# up in the background. 
-kubectl wait -n grafana --for=condition=ready pod --all
+# up in the background. If not, we will wait up to 10 minutes instead of the
+# default 30 seconds.
+kubectl wait -n grafana --for=condition=ready pod --all --timeout=10m
 sudo kubectl port-forward services/corekube-grafana -n grafana --address='0.0.0.0' 12345:3000 &
 
 # Install metrics-server for HPA

@@ -68,6 +68,8 @@ data:
         isDefault: true
         version: 1
         editable: false
+        jsonData:
+          timeInterval: 5s
 
 ---
 
@@ -83,7 +85,7 @@ data:
     apiVersion: 1
     providers:
       - name: 'CoreKube Metrics'
-        updateIntervalSeconds: 10
+        updateIntervalSeconds: 5
         allowUiUpdates: true
         options:
           path: /var/lib/grafana/dashboards

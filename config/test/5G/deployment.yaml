@@ -148,7 +148,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
       - name: corekube-core-monitor
-        image: yutotakano/corekube-core-monitor:202308291619
+        image: yutotakano/corekube-core-monitor:202308311633
         command:
         - python3
         - core-monitor.py

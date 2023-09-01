@@ -69,10 +69,10 @@ ssh-keygen -y -f ${HOME}/.ssh/id_rsa > ${HOME}/.ssh/id_rsa.pub
 master_token=''
 while [ -z $master_token ] 
 do
-    master_token=`ssh -o StrictHostKeyChecking=no master "export KUBECONFIG='/local/repository/kube/admin.conf' && kubeadm token list | grep authentication | cut -d' ' -f 1"`;
+    master_token=`ssh -o StrictHostKeyChecking=no 192.168.4.82 "export KUBECONFIG='/local/repository/kube/admin.conf' && kubeadm token list | grep authentication | cut -d' ' -f 1"`;
     sleep 1;
 done
-sudo kubeadm join master:6443 --token $master_token --discovery-token-unsafe-skip-ca-verification 
+sudo kubeadm join 192.168.4.82:6443 --token $master_token --discovery-token-unsafe-skip-ca-verification 
 
 # patch the kubelet to force --resolv-conf=''
 sudo sed -i 's#Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml"#Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml --resolv-conf=''"#g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf

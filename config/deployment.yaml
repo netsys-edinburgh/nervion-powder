@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: ran-emulator
-        image: j0lama/ran_controller:latest
+        image: yutotakano/ran_controller_test:202308301735
         env:
         - name: PYTHONUNBUFFERED
           value: "0"

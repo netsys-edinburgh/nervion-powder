@@ -77,6 +77,7 @@ sudo chown ${username}:${usergid} $KUBEHOME/admin.conf
 
 # Install Flannel. See https://github.com/coreos/flannel
 sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+sudo kubectl get daemonset -n kube-flannel kube-flannel-ds -o json | jq '.spec.template.spec.containers[0].args += ["--iface-regex=192\\.168\\..*\\..*"]' | sudo kubectl replace -f -
 
 # use this to enable autocomplete
 source <(kubectl completion bash)

@@ -241,7 +241,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "light-purple",
                 "value": null
               }
             ]
@@ -302,7 +302,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "light-purple",
+            "mode": "fixed"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -503,7 +504,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "green",
                 "value": null
               },
               {
@@ -572,7 +573,7 @@
         "defaults": {
           "color": {
             "fixedColor": "semi-dark-purple",
-            "mode": "fixed"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisCenteredZero": false,

@@ -40,208 +40,6 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "si: cores"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 1,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus-datasource-1"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "label_replace(label_replace(label_replace(coremon_cpu_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{name}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "CoreKube CPU Usage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-datasource-1"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Memory",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus-datasource-1"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "label_replace(label_replace(label_replace(coremon_mem_usage{namespace=\"default\", container_name!=\"corekube-core-monitor\"}, \"name\", \"Worker $1\", \"pod_name\", \"corekube-worker-[^-]+-(.*)\"), \"name\", \"Frontend\", \"pod_name\", \"corekube-frontend-[^-]+-(.*)\"), \"name\", \"DB\", \"pod_name\", \"corekube-db-[^-]+-(.*)\")",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{name}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "CoreKube Memory Usage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-datasource-1"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Cores",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
             "fillOpacity": 25,
             "gradientMode": "none",
             "hideFrom": {
@@ -291,7 +89,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 0
       },
       "id": 10,
       "options": {
@@ -299,7 +97,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -394,7 +192,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 0
       },
       "id": 5,
       "options": {
@@ -402,7 +200,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -456,7 +254,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 17
+        "y": 9
       },
       "id": 8,
       "options": {
@@ -473,7 +271,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.1.2",
       "targets": [
         {
           "datasource": {
@@ -558,7 +356,7 @@
         "h": 6,
         "w": 5,
         "x": 2,
-        "y": 17
+        "y": 9
       },
       "id": 4,
       "options": {
@@ -602,7 +400,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "dark-yellow",
+            "mode": "fixed"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -640,12 +439,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-yellow",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -656,7 +451,7 @@
         "h": 6,
         "w": 5,
         "x": 7,
-        "y": 17
+        "y": 9
       },
       "id": 6,
       "options": {
@@ -708,7 +503,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-purple",
                 "value": null
               },
               {
@@ -729,7 +524,7 @@
         "h": 6,
         "w": 2,
         "x": 12,
-        "y": 17
+        "y": 9
       },
       "id": 9,
       "options": {
@@ -746,7 +541,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.1.2",
       "targets": [
         {
           "datasource": {
@@ -776,7 +571,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "semi-dark-purple",
+            "mode": "fixed"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -819,10 +615,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -834,7 +626,7 @@
         "h": 6,
         "w": 10,
         "x": 14,
-        "y": 17
+        "y": 9
       },
       "id": 3,
       "options": {
@@ -884,7 +676,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-yellow",
                 "value": null
               }
             ]
@@ -897,7 +689,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 20
+        "y": 12
       },
       "id": 7,
       "options": {
@@ -914,7 +706,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.1.2",
       "targets": [
         {
           "datasource": {
@@ -956,13 +748,44 @@
           },
           "unit": "pps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Downlink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uplink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
         "w": 4,
         "x": 0,
-        "y": 23
+        "y": 15
       },
       "id": 12,
       "options": {
@@ -979,24 +802,8 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.1.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus-datasource-1"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "label_replace(rate(coremon_downlink_packets_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{name}}",
-          "range": true,
-          "refId": "Downlink Packet Rate",
-          "useBackend": false
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1012,6 +819,22 @@
           "legendFormat": "{{name}}",
           "range": true,
           "refId": "Uplink Packet Rate",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource-1"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "label_replace(rate(coremon_downlink_packets_total[$__rate_interval]), \"name\", \"Downlink\", \"\", \"\")",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "Downlink Packet Rate",
           "useBackend": false
         }
       ],
@@ -1077,13 +900,44 @@
           },
           "unit": "pps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uplink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Downlink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
         "w": 20,
         "x": 4,
-        "y": 23
+        "y": 15
       },
       "id": 11,
       "options": {

@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grafana
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: corekube-grafana
+  namespace: grafana
+  labels:
+    app: corekube-grafana
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3000 # kubernetes-internal port
+      nodePort: 30010 # public port
+      protocol: TCP
+  selector:
+    app: corekube-grafana # selects the deployment by this match label
+  sessionAffinity: None
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corekube-grafana-main-config
+  namespace: grafana
+  labels:
+    name: corekube-grafana-main-config
+data:
+  grafana.ini: |-
+    [auth.anonymous]
+    enabled = true
+
+    [users]
+    home_page = /d/be3d8ddb-7d64-4ac5-b27c-3b771e5ec831/corekube-dashboard
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corekube-grafana-datasources
+  namespace: grafana
+  labels:
+    name: corekube-grafana-datasources
+data:
+  prometheus.yaml: |-
+    # https://grafana.com/docs/grafana/latest/administration/provisioning/
+    apiVersion: 1
+
+    datasources:
+      - name: CoreKube Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        uid: prometheus-datasource-1
+        url: http://corekube-prometheus.prometheus.svc.cluster.local:9090
+        user:
+        database:
+        basicAuth:
+        basicAuthUser:
+        withCredentials:
+        isDefault: true
+        version: 1
+        editable: false
+        jsonData:
+          timeInterval: 5s
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corekube-grafana-dashboard-definition
+  namespace: grafana
+  labels:
+    name: corekube-grafana-dashboard-definition
+data:
+  dashboards.yaml: |-
+    apiVersion: 1
+    providers:
+      - name: 'CoreKube Metrics'
+        updateIntervalSeconds: 5
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards
+          foldersFromFilesStructure: true
+        type: file
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: corekube-grafana
+  name: corekube-grafana
+  namespace: grafana
+spec:
+  selector:
+    matchLabels:
+      app: corekube-grafana
+  template:
+    metadata:
+      labels:
+        app: corekube-grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: grafana
+          image: grafana/grafana-oss:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000 # kubernetes-internal port
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /robots.txt
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3000
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 750Mi
+          volumeMounts:
+            - mountPath: /etc/grafana
+              name: corekube-grafana-main-config-volume
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: corekube-grafana-datasources-volume
+            - mountPath: /etc/grafana/provisioning/dashboards
+              name: corekube-grafana-dashboard-definition-volume
+            - mountPath: /var/lib/grafana/dashboards
+              name: corekube-grafana-dashboards-volume
+      volumes:
+      - name: corekube-grafana-main-config-volume
+        configMap:
+          name: corekube-grafana-main-config
+      - name: corekube-grafana-datasources-volume
+        configMap:
+          name: corekube-grafana-datasources
+      - name: corekube-grafana-dashboard-definition-volume
+        configMap:
+          name: corekube-grafana-dashboard-definition
+      - name: corekube-grafana-dashboards-volume
+        configMap:
+          name: corekube-grafana-dashboards

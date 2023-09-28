@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corekube-prometheus-conf
+  namespace: prometheus
+  labels:
+    name: corekube-prometheus-conf
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval: 1s
+    scrape_configs:
+      - job_name: corekube-metrics-monitor
+        static_configs:
+        - targets: ['corekube-metrics-export-service.default.svc.cluster.local:5050'] # Kubernetes DNS will resolve this to the corresponding service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: prometheus
+  name: corekube-prometheus
+  labels:
+    app: corekube-prometheus
+spec:
+  type: ClusterIP
+  selector:
+    app: corekube-prometheus
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corekube-prometheus
+  namespace: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: corekube-prometheus
+  template:
+    metadata:
+      labels:
+        app: corekube-prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus
+        args:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--web.listen-address=0.0.0.0:9090"
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: corekube-prometheus-config-volume
+          mountPath: /etc/prometheus/
+      volumes:
+      - name: corekube-prometheus-config-volume
+        configMap:
+          name: corekube-prometheus-conf

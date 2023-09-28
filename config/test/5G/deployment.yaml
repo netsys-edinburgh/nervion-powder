@@ -133,6 +133,7 @@ spec:
       labels:
         app: corekube-frontend
     spec:
+      serviceAccountName: corekube-core-sa
       containers:
       - name: corekube-frontend
         image: andrewferguson/corekube-frontend:latest
@@ -146,3 +147,71 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+      - name: corekube-core-monitor
+        image: yutotakano/corekube-core-monitor:202309011548
+        command:
+        - python3
+        - core-monitor.py
+        - '5050'
+        - '1'
+        ports:
+        - containerPort: 5050
+        securityContext:
+          privileged: true # Required to access the Kubernetes API
+
+
+---
+
+# Create a Service Account to be used by the Core Monitor when querying the Kubernetes API
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: corekube-core-sa
+
+---
+
+# Create a ClusterRole that has the capabilities to get/list the pods/nodes in the API
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: corekube-core-cr
+rules:
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list", "watch"]
+
+---
+
+# Bind the above ClusterRole to the Service Account
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: corekube-core-crb
+subjects:
+- kind: ServiceAccount
+  name: corekube-core-sa
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: corekube-core-cr
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# Expose the corekube-core-monitor container's port 5050 (within the
+# corekube-frontend pod) as a service that can be accessed from within the
+# cluster network (and from Prometheus)
+apiVersion: v1
+kind: Service
+metadata:
+  name: corekube-metrics-export-service
+  labels:
+    app: corekube-metrics-export-service
+spec:
+  type: ClusterIP
+  selector:
+    app: corekube-frontend # The selector for the pod containing core-monitor
+  ports:
+  - port: 5050
+    targetPort: 5050
+    protocol: TCP
